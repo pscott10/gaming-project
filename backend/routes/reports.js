@@ -3,7 +3,7 @@ const processReports = require('../combineReports');
 const router = express.Router();
 
 router.post('/combine', async (req, res) => {
-    const inputFiles = ['./data/AdamsVGRevenueReport.csv', './data/AltamontVGRevenueReport.csv'];
+    const inputFiles = ['./data/AdamsVGRevenueReport.csv', './data/AltamontVGRevenueReport.csv'];  
     const outputFile = './data/combined_report.csv';
 
     try {
