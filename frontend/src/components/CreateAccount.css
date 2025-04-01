@@ -1,12 +1,14 @@
-body{
+ .background-body{
     background: #020265;
-}
+    width: 1390px;
+    padding-bottom:12px;
+} 
 /*Puts form left center*/
 .account-container{
     display: flex;
     flex-direction: column;
     margin: auto;
-    margin-top: 200px;
+    margin-top: 50px;
     width: 600px;
     background: #fff;
     padding-bottom: 30px;
