@@ -1,0 +1,63 @@
+.sidebar-background{
+    background-color: transparent;
+    width: justify;
+    height: 100vh;
+}
+
+.sidebar{
+    height: 100%;
+    margin-top: 0px;
+    width: 200px;
+    background-color: white; 
+    border: 1px solid grey;
+    float:left;
+    padding-bottom: 190px;
+
+}
+
+.profile{
+    font-family: sans-serif;
+}
+
+.sidebar-button{
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    border: 1px solid black;
+
+}
+.profile-header{
+    background: lightgray;
+    align-content: center;
+    width: justify;
+    display: flex;
+    justify-content: space-between; 
+    flex-direction: column;
+    float: center;
+    padding-bottom: 600px;
+    border: 1px solid gray;
+} 
+
+.saved-reports{
+    height: 1.7em;
+    font-size: 2.0em;
+}
+
+.create-report{
+    text-align: right;
+    border: 1px solid black;
+    margin-left: 700px;
+    background-color: black;
+    color: white;
+}
+
+.report-list{
+    text-align: left;
+    border: 1px solid grey;
+    padding-block: 5px;
+    margin-top: 10px;
+}
+
+
+
+

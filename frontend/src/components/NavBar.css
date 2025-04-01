@@ -1,16 +1,18 @@
 .nav-container{
     background: white;
     align-content: center;
-    width: 100%;
+    width: justify;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 15px 7%;
+    padding: 1px;
+    /*border: 1px solid grey;*/
 }
 
 .logo{
-    height: 1.5em;
+    height: 1.7em;
     font-size: 2.0em;
+
 }
 
 .ul{
@@ -25,6 +27,7 @@ button{
   padding: 0.6em 1.2em;
   font-weight: 500;
   font-family: inherit;
+  font-size: large;
   background-color: transparenT;
   color: #1e1e1e;
   cursor: pointer;
