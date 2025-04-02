@@ -6,6 +6,7 @@ import {CreateAccount} from './Pages/CreateAccount'
 import {Login} from './Pages/Login'
 import {Profile} from './pages/Profile'
 import CreateReport from './components/CreateReport';
+import ReportTable from './components/ReportTable';
 
 
 function App(){
@@ -17,6 +18,7 @@ function App(){
       <Route path="/login" element={<Login/>} />
       <Route path="/profile" element={<Profile/>} />
       <Route path="/createReport" element={<CreateReport />} />
+      <Route path="/report/:id" element={<ReportTable/>} />
       </Routes>
     </Router>
   )
