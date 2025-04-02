@@ -12,7 +12,6 @@ function ReportTable(){
         axios
           .get(`${import.meta.env.VITE_API_BASE_URL}/api/reports/history/${id}`)
           .then(response => {
-            // Assume response.data.data is a JSON string that needs to be parsed.
             let rows = [];
             try {
               rows = JSON.parse(response.data.data);
@@ -36,6 +35,7 @@ function ReportTable(){
     return (
         <div>
         <h2>Comprehensive Report #{id}</h2>
+        <h2></h2>
         <table border="1" cellPadding="5" style={{ borderCollapse: 'collapse', width: '100%' }}>
             <thead>
             <tr>
