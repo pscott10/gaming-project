@@ -1,19 +1,19 @@
 import React from 'react'
 import '../components/Login.css'
 import '../components/NavBar.css'
+import {Link} from 'react-router-dom'
 
-const Login = () => {
+export function Login(){
     return (
         <div className= "background-body">
             <div className="nav-container">
             <h1 className="logo">🎮 Gaming Edge</h1>
             <ul>
-                <button className="active">Products</button>
-                <button>Home</button>
+                <Link to="/"><button>Home</button></Link>
                 <button>About</button>
                 <button>Contact</button>
-                <button className="sign-in">Sign in</button>
-                <button className="register">Register</button>
+                <Link to="/login"><button className="sign-in">Sign in</button></Link>
+                <Link to="/createAccount"><button className="register">Register</button></Link>
             </ul>
         </div>
         <div className='login-container'>
@@ -21,9 +21,6 @@ const Login = () => {
                 <div className="text">Login</div>
             </div>
                 <div className="inputs">
-                {/* <div className="input">
-                    <input type="text" placeholder="Name" />
-                </div> */}
                 <div className="input">
                     <input type="email" placeholder="Email" />
                 </div>
@@ -32,6 +29,7 @@ const Login = () => {
                 </div>
             </div>
             <div className="forgot-password">Forgot Password?<span>Click Here!</span> </div>
+            <div className="forgot-password">Don't have an account?<span><Link to="/createAccount">Click Here!</Link></span> </div>
             <div className="submit-container">
                 <div className="submit">Login</div>
             </div>

@@ -1,19 +1,19 @@
 import React from 'react'
 import '../components/CreateAccount.css'
 import '../components/NavBar.css'
+import {Link} from 'react-router-dom'
 
-const CreateAccount = () => {
+export function CreateAccount(){
     return (
         <div className="background-body">
             <div className="nav-container">
             <h1 className="logo">🎮 Gaming Edge</h1>
             <ul>
-                <button className="active">Products</button>
-                <button>Home</button>
+                <Link to="/"><button>Home</button></Link>
                 <button>About</button>
                 <button>Contact</button>
-                <button className="sign-in">Sign in</button>
-                <button className="register">Register</button>
+                <Link to="/login"><button className="sign-in">Sign in</button></Link>
+                <Link to="/createAccount"><button className="register">Register</button></Link>
             </ul>
         </div>
         <div className='account-container'>
@@ -31,7 +31,7 @@ const CreateAccount = () => {
                     <input type="password" placeholder="Password" />
                 </div>
             </div>
-            <div className="forgot-password">Already have an account?<span> Click Here!</span> </div>
+            <div className="forgot-password">Already have an account?<span><Link to="/login"> Click Here!</Link></span> </div>
             <div className="submit-container">
                 <div className="submit">Register</div>
                 {/* <div className="submit">Login</div> */}
