@@ -33,6 +33,7 @@ function CreateReport(){
                 }
             );
             console.log("Report Created:", response.data);
+            alert("REPORT CREATED YAY");
             //GOTO Report Detail Page
         } catch (error) {
             console.log(import.meta.env.VITE_API_BASE_URL);
