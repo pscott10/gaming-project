@@ -28,7 +28,9 @@ export function Profile() {
                 </div>
                 <div className="profile-header">
              <ul className="logo">Saved Reports
-             <button className="create-report">Create Report</button>
+                <Link to="/createReport">
+                    <button className="create-report">Create Report</button>
+                </Link>
              </ul>
                  <button className="report-list">Report 1</button>
                  <button className="report-list">Report 2</button>

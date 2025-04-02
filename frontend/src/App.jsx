@@ -4,7 +4,9 @@ import {HashRouter as Router, Routes, Route} from 'react-router-dom'
 import {Home} from './Pages/Home'
 import {CreateAccount} from './Pages/CreateAccount'
 import {Login} from './Pages/Login'
-import {Profile} from './Pages/Profile'
+import {Profile} from './pages/Profile'
+import CreateReport from './components/CreateReport';
+
 
 function App(){
   return(
@@ -14,6 +16,7 @@ function App(){
       <Route path="/createAccount" element={<CreateAccount/>} />
       <Route path="/login" element={<Login/>} />
       <Route path="/profile" element={<Profile/>} />
+      <Route path="/createReport" element={<CreateReport />} />
       </Routes>
     </Router>
   )
