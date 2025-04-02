@@ -31,7 +31,7 @@ export function Login(){
             <div className="forgot-password">Forgot Password?<span>Click Here!</span> </div>
             <div className="forgot-password">Don't have an account?<span><Link to="/createAccount">Click Here!</Link></span> </div>
             <div className="submit-container">
-                <div className="submit">Login</div>
+                <div className="submit"><Link to="/profile">Login</Link></div>
             </div>
         </div>
         </div>

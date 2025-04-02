@@ -1,17 +1,18 @@
 .nav-container{
     background: white;
     align-content: center;
-    width: justify;
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 1px;
-    /*border: 1px solid grey;*/
+    border: 1px solid black;
 }
 
 .logo{
     height: 1.7em;
+    display: flex;
     font-size: 2.0em;
+    text-align: left;
 
 }
 
