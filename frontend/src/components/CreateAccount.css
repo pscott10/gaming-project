@@ -1,8 +1,11 @@
- .background-body{
-    background: #020265;
-    width: 1390px;
+/*  .background-body{
+    background-color: #020265;
+    width: justify;
     padding-bottom:12px;
-} 
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}  */
 /*Puts form left center*/
 .account-container{
     display: flex;
@@ -10,7 +13,7 @@
     margin: auto;
     margin-top: 50px;
     width: 600px;
-    background: #fff;
+    background: lightgray;
     padding-bottom: 30px;
 }
 
