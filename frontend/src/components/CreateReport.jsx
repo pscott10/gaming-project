@@ -35,9 +35,10 @@ function CreateReport(){
             console.log("Report Created:", response.data);
             alert("REPORT CREATED YAY");
             //GOTO Report Detail Page
+            const reportID = response.data.reportID;
+            navigate(`/report/${reportID}`);
         } catch (error) {
             console.log(import.meta.env.VITE_API_BASE_URL);
-
             console.error("Error creating report:", error);
             alert("Error creating report. Please check the console for details.");
         }
