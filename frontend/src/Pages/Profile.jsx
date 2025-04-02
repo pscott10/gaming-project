@@ -2,19 +2,19 @@ import React from 'react'
 import '../components/NavBar.css'
 import '../components/Profile.css'
 import '../components/Sidebar.css'
+import {Link} from 'react-router-dom'
 
-const Profile = () => {
+export function Profile() {
     return (
         <div>
             <div className="nav-container">
              <h1 className="logo">🎮 Gaming Edge</h1>
              <ul>
-                 <button className="active">Products</button>
-                 <button>Home</button>
+                 <Link to="/"><button>Home</button></Link>
                  <button>About</button>
                  <button>Contact</button>
-                 <button className="sign-in">Sign in</button>
-                 <button className="register">Register</button>
+                 <Link to="/login"><button className="sign-in">Sign in</button></Link>
+                 <Link to="/createAccount"><button className="register">Register</button></Link>
              </ul>
              </div>
             <div className="sidebar-background">

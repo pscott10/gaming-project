@@ -1,0 +1,45 @@
+.home-container{
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    margin-top: 200px;
+    width: justify;
+    padding-bottom: 30px;
+}
+
+.header{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 9px;
+    width: 100%;
+    margin-top: 30px;
+}
+
+.logo2{
+    color: #1e1e1e;
+    font-size: 100px;
+    font-weight: 700;
+}
+
+.buttons{
+    margin-top: 55px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.active{
+    display: flex;
+    margin: 10px auto;
+    justify-content: center;
+    font-size: 35px;
+
+}
+
+.button{
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    border: 1px solid black; 
+}
