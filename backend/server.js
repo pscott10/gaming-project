@@ -5,12 +5,14 @@ const reportRoutes = require('./routes/reports');
 const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
-
+require('dotenv').config();
+const authRoutes = require('./routes/auth');
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 app.use('/api/reports', reportRoutes);
+app.use('/api/auth', authRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
