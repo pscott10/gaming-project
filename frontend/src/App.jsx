@@ -4,9 +4,10 @@ import {HashRouter as Router, Routes, Route} from 'react-router-dom'
 import {Home} from './Pages/Home'
 import {CreateAccount} from './Pages/CreateAccount'
 import {Login} from './Pages/Login'
-import {Profile} from './pages/Profile'
+import {Profile} from './Pages/Profile'
 import CreateReport from './components/CreateReport';
 import ReportTable from './components/ReportTable';
+import CreateReportModal from './components/CreateReportModal'
 
 
 function App(){
@@ -19,6 +20,7 @@ function App(){
       <Route path="/profile" element={<Profile/>} />
       <Route path="/createReport" element={<CreateReport />} />
       <Route path="/report/:id" element={<ReportTable/>} />
+      <Route path="/createReportModal" element={<CreateReportModal/>} />
       </Routes>
     </Router>
   )

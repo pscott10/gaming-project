@@ -4,14 +4,14 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 1px;
+    padding: 40px;
     border: 1px solid black;
 }
 
 .logo{
-    height: 1.7em;
     display: flex;
-    font-size: 2.0em;
+    font-size: xxx-large;
+    font-weight: bolder;
     text-align: left;
 
 }
@@ -23,16 +23,17 @@
 }
 
 button{
-   border-radius: 8px;
+
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
-  font-weight: 500;
-  font-family: inherit;
-  font-size: large;
+  font-family: sans-serif;
+  font-weight: bold;
+  font-size: x-large;
   background-color: transparenT;
   color: #1e1e1e;
   cursor: pointer;
   transition: border-color 0.25s; 
+  text-align: left;
 }
 
 button:hover{

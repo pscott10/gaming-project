@@ -1,42 +1,35 @@
-import React from 'react'
-import '../components/NavBar.css'
+import React, {useState} from 'react'
+import NavBar from '../components/NavBar'
+import Sidebar from '../components/Sidebar'
 import '../components/Profile.css'
-import '../components/Sidebar.css'
 import {Link} from 'react-router-dom'
+import CreateReportModal from '../components/CreateReportModal'
+import CreateReport from '../components/CreateReport'
 
 export function Profile() {
+    const[isModalOpen, setIsModalOpen] = useState(false);
+
+    const openModal = () => setIsModalOpen(true);
+    const closeModal = () => setIsModalOpen(false);
+
     return (
-        <div>
-            <div className="nav-container">
-             <h1 className="logo">🎮 Gaming Edge</h1>
-             <ul>
-                 <Link to="/"><button>Home</button></Link>
-                 <button>About</button>
-                 <button>Contact</button>
-                 <Link to="/login"><button className="sign-in">Sign in</button></Link>
-                 <Link to="/createAccount"><button className="register">Register</button></Link>
-             </ul>
-             </div>
-            <div className="sidebar-background">
-                <div className="sidebar">
-                    <h1 className="profile">Profile</h1>
-                    <ul>
-                        <button className="sidebar-button">Saved Reports</button>
-                        <button className="sidebar-button">History</button>
-                        <button className="sidebar-button">Calculations</button>
-                    </ul>
+        <div className="profile-container">
+            <NavBar />
+            <div className="main-layout">
+                <Sidebar />
+                <div className="profile-content">
+                    <div className="profile-header">
+                        <div className="header-left">
+                        <ul className='savedreports-header'>Saved Reports </ul>
+                        <button className='create-report' onClick={openModal}>Create Report</button>
+                        </div>
+                        <button className="report-list">Report 1</button>
+                    </div>
                 </div>
-                <div className="profile-header">
-             <ul className="logo">Saved Reports
-                <Link to="/createReport">
-                    <button className="create-report">Create Report</button>
-                </Link>
-             </ul>
-                 <button className="report-list">Report 1</button>
-                 <button className="report-list">Report 2</button>
-                 <button className="report-list">Report 3</button>
             </div>
-         </div>
+            <CreateReportModal isOpen={isModalOpen} onClose={closeModal}>
+                <CreateReport />
+            </CreateReportModal>
         </div>
     )
 }

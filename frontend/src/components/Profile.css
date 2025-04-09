@@ -1,0 +1,153 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.profile-container{
+    display: flex;
+    flex-direction: column; 
+    height: 100vh;
+}
+
+.navbar{
+    background-color: #333;
+    color: white;
+    padding: 10px;
+    text-align: center;
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.main-layout{
+    display: flex;
+    flex: 1;
+    flex-wrap: nowrap;
+    height: 100%;
+}
+
+.sidebar{
+    width: 265px;
+    background-color: #f4f4f4;
+    padding: 15px;
+    flex-shrink: 0;
+    position: flex ;
+    height: 100%;
+    border: 1px solid grey;
+}
+
+.profile-content{
+    flex: 1; 
+    padding: 20px; 
+    background-color: #fff;
+    background: lightgray; 
+}
+.profile-header{
+    /* background: lightgray;
+    align-content: center;
+    width: justify;
+    display: flex;
+    justify-content: space-between; 
+    flex-direction: column;
+    float: center;
+    padding-bottom: 600px;
+    border: 1px solid gray; */ 
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    margin-left: 50px;
+    gap: 20px;
+    flex-direction: column;
+    font-family: sans-serif;
+} 
+
+.header-left{
+    display: flex;
+    align-items: left;
+}
+
+.savedreports-header{
+    font-size: 30px;
+    font-weight: bold;
+    margin-right: 100px;
+    padding-top: 10px;
+}
+
+/* .saved-reports{
+    height: 1.7em;
+    font-size: 2.0em;
+} */
+
+.create-report{
+    padding: 15px 20px;
+    font-size: 20px;
+    font-family: sans-serif;
+    /*border: 1px solid black;*/
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    border: 1px solid blue; 
+    cursor: pointer;
+} 
+
+.create-report:hover{
+    background-color: grey;
+}
+
+.report-list{
+   /*  text-align: left;
+    border: 1px solid grey;
+    padding-block: 5px;
+    margin-top: 10px;
+    color: black;
+    border-radius: 5px;
+    cursor: pointer; */
+    padding: 10px 20px;
+    font-size: 16px;
+    color: black;
+    border: 1px solid black;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.report-list:hover{
+    background-color: grey;
+}
+
+@media screen and (max-width: 760px){
+    .main-layout{
+        flex-direction: column;
+    }
+
+    .sidebar{
+        width: 100%;
+        position: relative;
+        margin-bottom: 20px;
+    }
+
+    .profile-content{
+        margin-left: 0;
+    }
+
+    .profile-header{
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .create-report{
+        width: 100%;
+        margin-top: 10px;
+    }
+
+     .report-list{
+        width: 100%;
+        margin-top: 10px;
+    } 
+}
+
+@media screen and (max-width: 480px){
+    .report-list{
+        font-size: 14px;
+    }
+}
