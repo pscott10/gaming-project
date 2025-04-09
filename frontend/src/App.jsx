@@ -7,6 +7,7 @@ import {Login} from './pages/Login'
 import {Profile} from './pages/Profile'
 import CreateReport from './components/CreateReport';
 import ReportTable from './components/ReportTable';
+import CreateReportModal from './components/CreateReportModal'
 
 
 function App(){
@@ -19,6 +20,7 @@ function App(){
       <Route path="/profile" element={<Profile/>} />
       <Route path="/createReport" element={<CreateReport />} />
       <Route path="/report/:id" element={<ReportTable/>} />
+      <Route path="/createReportModal" element={<CreateReportModal/>} />
       </Routes>
     </Router>
   )
