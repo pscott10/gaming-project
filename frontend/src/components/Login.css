@@ -3,9 +3,9 @@
     display: flex;
     flex-direction: column;
     margin: auto;
-    margin-top: 200px;
+    margin-top: 50px;
     width: 600px;
-    background: #fff;
+    background: lightgray;
     padding-bottom: 30px;
 }
 
