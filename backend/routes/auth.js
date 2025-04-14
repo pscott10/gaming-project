@@ -48,16 +48,14 @@ router.post('/login', (req, res) => {
     });
 });
 
-router.get('/google', passport.authentication('google', {
+router.get('/google', passport.authenticate('google', {
     scope: ['profile', 'email']
 }));
 
 router.get('/google/callback',
     passport.authenticate('google', {failureRedirect: '/login' }),
     (req, res) => {
-        //redirect to desired page
-        //generate a JWT if combining sessions and JWT
-        res.redirect('/profile');
+        res.redirect('http://localhost:5173/#/profile');
     }
 );
 

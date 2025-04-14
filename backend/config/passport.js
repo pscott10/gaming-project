@@ -10,7 +10,7 @@ passport.use(new GoogleStrategy({
     (accessToken, refreshToken, profile, done) => {
         console.log("Google profile:", profile);
         const db = require('../database/db');
-        db.get("SELECT * FROM users WHERE googleID = ?", [profile.id], (err, user) => {
+        db.get("SELECT * FROM users WHERE googleId = ?", [profile.id], (err, user) => {
             if (err) {
                 return done(err);
             }

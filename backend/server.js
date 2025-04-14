@@ -1,21 +1,19 @@
 //set up express server
 
+require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
 const passport = require('passport');
-const reportRoutes = require('./routes/reports');
 const cors = require('cors');
-const fs = require('fs');
 const path = require('path');
-require('dotenv').config();
+const reportRoutes = require('./routes/reports');
 const authRoutes = require('./routes/auth');
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
-app.use('/api/reports', reportRoutes);
-app.use('/api/auth', authRoutes);
+
 
 app.use(session({
   secret: process.env.SESSION_SECRET || 'superSecretSessionKey',
@@ -25,7 +23,10 @@ app.use(session({
 
 app.use(passport.initialize());
 app.use(passport.session());
+
 require('./config/passport');
+
+
 app.use('/api/reports', reportRoutes);
 app.use('/api/auth', authRoutes);
 
@@ -37,10 +38,7 @@ app.listen(PORT, () => {
 
 const { createObjectCsvWriter } = require('csv-writer');
 
-/**
- * Writes the given rows to a CSV file at filePath.
- * Returns a Promise that resolves to filePath.
- */
+
 async function exportToCsv(rows, filePath) {
   const csvWriter = createObjectCsvWriter({
     path: filePath,
