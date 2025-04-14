@@ -39,8 +39,9 @@ db.run(`
   db.run(`
     CREATE TABLE IF NOT EXISTS users (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      email TEXT UNIQUE NOT NULL,
-      password TEXT NOT NULL,
+      googleId TEXT,
+      email TEXT UNIQUE,
+      password TEXT,
       name TEXT,
       createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
     )

@@ -3,6 +3,7 @@ const router = express.Router();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const db = require('../database/db');
+const passport = require('passport');
 
 //sign-up endpoint
 router.post('/signup', (req, res) => {
@@ -46,5 +47,18 @@ router.post('/login', (req, res) => {
         });
     });
 });
+
+router.get('/google', passport.authentication('google', {
+    scope: ['profile', 'email']
+}));
+
+router.get('/google/callback',
+    passport.authenticate('google', {failureRedirect: '/login' }),
+    (req, res) => {
+        //redirect to desired page
+        //generate a JWT if combining sessions and JWT
+        res.redirect('/profile');
+    }
+);
 
 module.exports = router;

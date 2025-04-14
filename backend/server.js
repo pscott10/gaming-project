@@ -1,16 +1,31 @@
-
 //set up express server
+
 const express = require('express');
+const session = require('express-session');
+const passport = require('passport');
 const reportRoutes = require('./routes/reports');
 const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
 require('dotenv').config();
 const authRoutes = require('./routes/auth');
+
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use('/api/reports', reportRoutes);
+app.use('/api/auth', authRoutes);
+
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'superSecretSessionKey',
+  resave: false,
+  saveUninitialized: false
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+require('./config/passport');
 app.use('/api/reports', reportRoutes);
 app.use('/api/auth', authRoutes);
 

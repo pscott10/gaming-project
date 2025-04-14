@@ -66,6 +66,12 @@ export function Login(){
                 <button className="submit" type="submit">Login</button>
             </div>
             </form>
+            <div style={{marginTop: '1rem'}}>
+                {/* Google OAuth Login Link */}
+                <a href={`${import.meta.env.VITE_API_BASE_URL}/api/auth/google`}>
+                    <button className="oauth-button">Login with Google</button>
+                    </a>
+            </div>
             <div className="forgot-password">Forgot Password?<span>Click Here!</span> </div>
             <div className="forgot-password">Don't have an account?<span><Link to="/createAccount">Click Here!</Link></span> </div>
         </div>
