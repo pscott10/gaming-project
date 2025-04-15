@@ -131,47 +131,45 @@ router.post('/upload', upload.single('file'), (req, res) => {
         return res.status(400).json({error: 'Filters and title are required'});
     }
 
+    const userId = req.user ? req.user.id : null;
+
+    let monthsArray = [];
+    if (typeof filters.month === 'string') {
+        monthsArray = filters.month.split(',').map(m => m.trim());
+    } else if (Array.isArray(filters.month)) {
+        monthsArray = filters.month;
+    }
+
+    const yearValue = filters.year;
+
     let conditions = [];
     let params = [];
 
-    if(filters.month){
-        let months = typeof filters.month === 'string' ? filters.month.split(',').map(m => m.trim()) : filters.month;
-        if (months.length === 1){
-            conditions.push("Month = ?");
-            params.push(months[0]);
-        } else if (months.length > 1){
-            let placeholders = month.map(() => '?').join(',');
-            conditions.push(`Month IN (${placeholders})`);
-            params.push(...months);
+    if (monthsArray.length > 0) {
+        if (monthsArray.length === 1) {
+          conditions.push("Month = ?");
+          params.push(monthsArray[0]);
+        } else {
+          const placeholders = monthsArray.map(() => '?').join(',');
+          conditions.push(`Month IN (${placeholders})`);
+          params.push(...monthsArray);
         }
-    }
+      }
+    
+      if (yearValue) {
+        conditions.push("Year = ?");
+        params.push(yearValue);
+      }
 
-    if(filters.year){
-        let years = typeof filters.year === 'string' ? filters.year.split(',').map(y => y.trim()) : filters.year;
-        if (years.length === 1){
-            conditions.push("Year =?");
-            params.push(years[0]);
-        } else if (years.length > 1){
-            let placeholders = years.map(() => '?').join(',');
-            conditions.push(`Year IN (${placeholders})`);
-            params.push(...years);
+      if (filters.municipalities) {
+        let munis = typeof filters.municipalities === 'string'
+          ? filters.municipalities.split(',').map(s => s.trim())
+          : filters.municipalities;
+        if (munis.length > 0) {
+          const placeholders = munis.map(() => '?').join(',');
+          conditions.push(`Municipality IN (${placeholders})`);
+          params.push(...munis);
         }
-    }
-
-    if (filters.municipalities){
-        let munis = typeof filters.municipalities === 'string' ? filters.municipalities.split(',').map(s=>s.trim())
-            : filters.municipalities;
-        let placeholders = munis.map(() => '?').join(',');
-        conditions.push(`Municipality IN (${placeholders})`);
-        params.push(...munis);
-    }
-
-    if(filters.establishments){
-        let ests = typeof filters.establishments === 'string' ? filters.establishments.split(',').map(s=>s.trim())
-            : filters.establishments;
-        let placeholders = ests.map(() => '?').join(',');
-        conditions.push(`Establishment IN (${placeholders})`);
-        params.push(...ests);
     }
 
     let sql = "SELECT * FROM gaming_data";
@@ -186,19 +184,6 @@ router.post('/upload', upload.single('file'), (req, res) => {
             return res.status(500).json({error: 'Database error while fetching data'});
         }
         //apply custom calcs
-        if (customColumns && Array.isArray(customColumns)){
-            rows = rows.map(row => {
-                customColumns.forEach(col => {
-                    try {
-                        const result = math.evaluate(col.formula, row);
-                        row[col.columnName] = result;
-                    } catch (e) {
-                        row[col.columnName] = null;
-                    }
-                });
-                return row;
-            });
-        }
         const reportData = JSON.stringify(rows);
         const filtersJSON = JSON.stringify(filters);
         const customColumnsJSON = JSON.stringify(customColumns || []);
@@ -213,8 +198,7 @@ router.post('/upload', upload.single('file'), (req, res) => {
             ) VALUES (?, ?, ?, ?, ?)
         `;
 
-        //user_id is null!!!!
-        db.run(insertSql, [null, title, filtersJSON, customColumnsJSON, reportData], function(insertErr) {
+        db.run(insertSql, [userId, title, filtersJSON, customColumnsJSON, reportData], function(insertErr) {
             if (insertErr) {
                 console.error(insertErr);
                 return res.status(500).json({error: 'Error saving comprehensive report' });
