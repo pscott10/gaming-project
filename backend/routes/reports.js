@@ -6,6 +6,7 @@ const fs = require('fs');
 const csv = require('csv-parser');
 const db = require('../database/db');
 const math = require('mathjs');
+const verifyToken = require('../middleware/verifyToken');
 
 //configure Multer to store uploads in a temp folder
 const upload = multer({
@@ -76,21 +77,21 @@ router.post('/upload', upload.single('file'), (req, res) => {
   
             try {
               results.forEach((r) => {
-                const vgtCount = parseInt(r['VGT Count']) || 0;
-                const amountPlayed = parseFloat(r['Amount Played']) || 0;
-                const amountWon = parseFloat(r['Amount Won']) || 0;
-                const netWager = parseFloat(r['Net Wager']) || 0;
-                const fundsIn = parseFloat(r['Funds In']) || 0;
-                const fundsOut = parseFloat(r['Funds Out']) || 0;
-                const netTerminalIncome = parseFloat(r['Net Terminal Income']) || 0;
-                const ntiTax = parseFloat(r['NTI Tax']) || 0;
-                const stateShare = parseFloat(r['State Share']) || 0;
+                const vgtCount = parseInt(r['VGTCount']) || 0;
+                const amountPlayed = parseFloat(r['AmountPlayed']) || 0;
+                const amountWon = parseFloat(r['AmountWon']) || 0;
+                const netWager = parseFloat(r['NetWager']) || 0;
+                const fundsIn = parseFloat(r['FundsIn']) || 0;
+                const fundsOut = parseFloat(r['FundsOut']) || 0;
+                const netTerminalIncome = parseFloat(r['NetTerminal Income']) || 0;
+                const ntiTax = parseFloat(r['NTITax']) || 0;
+                const stateShare = parseFloat(r['StateShare']) || 0;
                 const municipalityShare = parseFloat(r['Municipality Share']) || 0;
   
                 stmt.run(
                   r['Municipality'] || '',
                   r['Establishment'] || '',
-                  r['License Number'] || '',
+                  r['LicenseNumber'] || '',
                   vgtCount,
                   amountPlayed,
                   amountWon,
@@ -125,53 +126,49 @@ router.post('/upload', upload.single('file'), (req, res) => {
   });
 
   //POST /api/reports/comphrehensive
-  router.post('/comprehensive', (req, res) => {
+  router.post('/comprehensive', verifyToken, (req, res) => {
+    const userId = req.user.id;
     const { filters, customColumns, title } = req.body;
     if (!filters || !title){
         return res.status(400).json({error: 'Filters and title are required'});
     }
 
+    let monthsArray = [];
+    if (typeof filters.month === 'string') {
+        monthsArray = filters.month.split(',').map(m => m.trim());
+    } else if (Array.isArray(filters.month)) {
+        monthsArray = filters.month;
+    }
+
+    const yearValue = filters.year;
     let conditions = [];
     let params = [];
 
-    if(filters.month){
-        let months = typeof filters.month === 'string' ? filters.month.split(',').map(m => m.trim()) : filters.month;
-        if (months.length === 1){
-            conditions.push("Month = ?");
-            params.push(months[0]);
-        } else if (months.length > 1){
-            let placeholders = month.map(() => '?').join(',');
-            conditions.push(`Month IN (${placeholders})`);
-            params.push(...months);
+    if (monthsArray.length > 0) {
+        if (monthsArray.length === 1) {
+          conditions.push("Month = ?");
+          params.push(monthsArray[0]);
+        } else {
+          const placeholders = monthsArray.map(() => '?').join(',');
+          conditions.push(`Month IN (${placeholders})`);
+          params.push(...monthsArray);
         }
-    }
+      }
+    
+      if (yearValue) {
+        conditions.push("Year = ?");
+        params.push(yearValue);
+      }
 
-    if(filters.year){
-        let years = typeof filters.year === 'string' ? filters.year.split(',').map(y => y.trim()) : filters.year;
-        if (years.length === 1){
-            conditions.push("Year =?");
-            params.push(years[0]);
-        } else if (years.length > 1){
-            let placeholders = years.map(() => '?').join(',');
-            conditions.push(`Year IN (${placeholders})`);
-            params.push(...years);
+      if (filters.municipalities) {
+        let munis = typeof filters.municipalities === 'string'
+          ? filters.municipalities.split(',').map(s => s.trim())
+          : filters.municipalities;
+        if (munis.length > 0) {
+          const placeholders = munis.map(() => '?').join(',');
+          conditions.push(`Municipality IN (${placeholders})`);
+          params.push(...munis);
         }
-    }
-
-    if (filters.municipalities){
-        let munis = typeof filters.municipalities === 'string' ? filters.municipalities.split(',').map(s=>s.trim())
-            : filters.municipalities;
-        let placeholders = munis.map(() => '?').join(',');
-        conditions.push(`Municipality IN (${placeholders})`);
-        params.push(...munis);
-    }
-
-    if(filters.establishments){
-        let ests = typeof filters.establishments === 'string' ? filters.establishments.split(',').map(s=>s.trim())
-            : filters.establishments;
-        let placeholders = ests.map(() => '?').join(',');
-        conditions.push(`Establishment IN (${placeholders})`);
-        params.push(...ests);
     }
 
     let sql = "SELECT * FROM gaming_data";
@@ -185,21 +182,76 @@ router.post('/upload', upload.single('file'), (req, res) => {
             console.error(err);
             return res.status(500).json({error: 'Database error while fetching data'});
         }
+
+        // Define a month order mapping so we can compare months numerically.
+        const monthOrder = {
+          January: 1,
+          February: 2,
+          March: 3,
+          April: 4,
+          May: 5,
+          June: 6,
+          July: 7,
+          August: 8,
+          September: 9,
+          October: 10,
+          November: 11,
+          December: 12
+        };
+
+        //console.log("Raw rows:", rows);
+        //group by license number to sum
+        const grouped = {};
+        rows.forEach(row => {
+          const license = row['LicenseNumber'] ? row['LicenseNumber'].trim() : '';
+          const currentMonthStr = row['Month'] ? row['Month'].trim() : '';
+          if (!grouped[license]) {
+            grouped[license] = { ...row };
+            // Initialize minMonth and maxMonth as the current row's month
+            grouped[license].minMonth = currentMonthStr;
+            grouped[license].maxMonth = currentMonthStr;
+          } else {
+            // Sum numeric fields
+            grouped[license]['VGTCount'] = (parseFloat(grouped[license]['VGTCount']) || 0) + (parseFloat(row['VGTCount']) || 0);
+            grouped[license]['AmountPlayed'] = (parseFloat(grouped[license]['AmountPlayed']) || 0) + (parseFloat(row['AmountPlayed']) || 0);
+            grouped[license]['AmountWon'] = (parseFloat(grouped[license]['AmountWon']) || 0) + (parseFloat(row['AmountWon']) || 0);
+            grouped[license]['NetWager'] = (parseFloat(grouped[license]['NetWager']) || 0) + (parseFloat(row['NetWager']) || 0);
+            grouped[license]['FundsIn'] = (parseFloat(grouped[license]['FundsIn']) || 0) + (parseFloat(row['FundsIn']) || 0);
+            grouped[license]['FundsOut'] = (parseFloat(grouped[license]['FundsOut']) || 0) + (parseFloat(row['FundsOut']) || 0);
+            grouped[license]['NetTerminalIncome'] = (parseFloat(grouped[license]['NetTerminalIncome']) || 0) + (parseFloat(row['NetTerminalIncome']) || 0);
+            grouped[license]['NTITax'] = (parseFloat(grouped[license]['NTITax']) || 0) + (parseFloat(row['NTITax']) || 0);
+            grouped[license]['StateShare'] = (parseFloat(grouped[license]['StateShare']) || 0) + (parseFloat(row['StateShare']) || 0);
+            grouped[license]['MunicipalityShare'] = (parseFloat(grouped[license]['MunicipalityShare']) || 0) + (parseFloat(row['MunicipalityShare']) || 0);
+      
+            // Update the month range
+            const currentMonthValue = monthOrder[currentMonthStr] || 0;
+            const minMonthValue = monthOrder[grouped[license].minMonth.trim()] || Infinity;
+            const maxMonthValue = monthOrder[grouped[license].maxMonth.trim()] || -Infinity;
+      
+            if (currentMonthValue < minMonthValue) {
+              grouped[license].minMonth = currentMonthStr;
+            }
+            if (currentMonthValue > maxMonthValue) {
+              grouped[license].maxMonth = currentMonthStr;
+            }
+          }
+        });
+
+        Object.keys(grouped).forEach(key => {
+          const minMonth = grouped[key].minMonth.trim();
+          const maxMonth = grouped[key].maxMonth.trim();
+          grouped[key]['Month'] = (minMonth === maxMonth) ? minMonth : `${minMonth} - ${maxMonth}`;
+          // Remove temporary properties if desired.
+          delete grouped[key].minMonth;
+          delete grouped[key].maxMonth;
+        });
+
+        //convert to array of aggregated rows
+        const aggregatedRows = Object.values(grouped);
+        //console.log("Aggregated rows:", aggregatedRows);  // Add this line for debugging
+
         //apply custom calcs
-        if (customColumns && Array.isArray(customColumns)){
-            rows = rows.map(row => {
-                customColumns.forEach(col => {
-                    try {
-                        const result = math.evaluate(col.formula, row);
-                        row[col.columnName] = result;
-                    } catch (e) {
-                        row[col.columnName] = null;
-                    }
-                });
-                return row;
-            });
-        }
-        const reportData = JSON.stringify(rows);
+        const reportData = JSON.stringify(aggregatedRows);
         const filtersJSON = JSON.stringify(filters);
         const customColumnsJSON = JSON.stringify(customColumns || []);
 
@@ -213,16 +265,15 @@ router.post('/upload', upload.single('file'), (req, res) => {
             ) VALUES (?, ?, ?, ?, ?)
         `;
 
-        //user_id is null!!!!
-        db.run(insertSql, [null, title, filtersJSON, customColumnsJSON, reportData], function(insertErr) {
+        db.run(insertSql, [userId, title, filtersJSON, customColumnsJSON, reportData], function(insertErr) {
             if (insertErr) {
                 console.error(insertErr);
                 return res.status(500).json({error: 'Error saving comprehensive report' });
             }
             return res.json({
-                message: 'Comphrehensive report created successfully',
-                reportID: this.lastID,
-                data: rows
+              message: 'Comprehensive report created successfully',
+              reportID: this.lastID,
+                data: aggregatedRows
             });
         });
     });
@@ -232,7 +283,7 @@ router.post('/upload', upload.single('file'), (req, res) => {
  * Lists ALL comprehensive reports for logged in user
  */
 router.get('/history', (req, res) => {
-    const sql = "SELECT id, title, filters, custom_columns, createAt FROM comprehensive_reports ORDER BY createdAt DESC";
+    const sql = "SELECT id, title, filters, custom_columns, createdAt FROM comprehensive_reports ORDER BY createdAt DESC";
     db.all(sql, [], (err, rows) => {
         if(err) {
             console.error(err);

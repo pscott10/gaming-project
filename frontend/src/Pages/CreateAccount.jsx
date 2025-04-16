@@ -9,7 +9,7 @@ export function CreateAccount(){
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const[password, setPassword] = useState('');
-    const navigate = useNavigate;
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -75,6 +75,12 @@ export function CreateAccount(){
                 <button type="submit" className="submit">Register</button>
             </div>
             </form>
+            <hr />
+            <div style={{marginTop: '1rem'}}>
+                <a href={`${import.meta.env.VITE_API_BASE_URL}/api/auth/google`}>
+                    <button className="oauth-button">Sign Up with Google</button>
+                </a>
+            </div>
         </div>
         </div>
     )
