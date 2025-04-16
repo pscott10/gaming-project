@@ -1,8 +1,8 @@
 import React, {useState} from 'react'
+import '../components/CreateAccount.css'
 import {Link, useNavigate} from 'react-router-dom'
 import axios from 'axios';
-import '../components/CreateAccount.css'
-import '../components/NavBar.css'
+import NavBar from '../components/NavBar';
 
 
 export function CreateAccount(){
@@ -30,16 +30,7 @@ export function CreateAccount(){
 
     return (
         <div className="background-body">
-            <div className="nav-container">
-            <h1 className="logo">Gaming Edge</h1>
-            <ul>
-                <Link to="/"><button>Home</button></Link>
-                <button>About</button>
-                <button>Contact</button>
-                <Link to="/login"><button className="sign-in">Sign in</button></Link>
-                <Link to="/createAccount"><button className="register">Register</button></Link>
-            </ul>
-        </div>
+            <NavBar />
         <div className='account-container'>
             <div className="header">
                 <div className="text">Create an Account</div>
@@ -77,10 +68,10 @@ export function CreateAccount(){
             <div className="forgot-password">
                 Already have an account?
                 <span>
-                    <Link to="/login"> Click Here!</Link>
+                    <Link to="/login" className='forgetSpan'> Click Here!</Link>
                 </span> 
             </div>
-            <div className="submit-container">
+            <div className="submiting-container">
                 <button type="submit" className="submit">Register</button>
             </div>
             </form>

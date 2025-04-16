@@ -2,45 +2,52 @@
     background-color: #020265;
     width: justify;
     padding-bottom: 500px
-}  
+}   
 /*Puts form left center*/
-.account-container{
+ .account-container{
     display: flex;
     flex-direction: column;
     margin: auto;
-    margin-top: 230px;
+    margin-top: 100px;
     width: 600px;
-    background: lightgray;
+    background-color: lightgray;
     padding-bottom: 30px;
 }
-
+ 
 /*Puts "Sign up" in the center*/
-.header{
+ .header{
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 9px;
     width: 100%;
     margin-top: 30px;
-}
+    background-color: lightgray;
+} 
 
 /*Increases size of "Sign Up" and changes color*/
 .text{
     color: #1e1e1e;
     font-size: 48px;
     font-weight:700; 
+    background: lightgray;
+ }
+
+ .forgetSpan{
+    background-color: lightgray;
  }
 
 /*Creates gap between input boxes*/
-.inputs{
+  .inputs{
     margin-top: 55px;
     display: flex;
     flex-direction: column;
     gap: 25px;
-}
+    background-color: lightgrey;
+}  
 
 /*Creates boxes and puts input in center */
-.input{
+/* .input{
     display: flex;
     align-items: center;
     margin: auto;
@@ -48,10 +55,10 @@
     height: 80px;
     background: #eaeaea;
     border-radius: 6px;
-}
+} */
 
 /*Text inside input boxes*/
-.input input{
+/* .input input{
     height: 50px;
     width: 400px;
     background: transparent;
@@ -59,30 +66,40 @@
     outline: none;
     color: #797979;
     font-size: 19px;
-}
+} */
 
 /*"lost password, click here!*/
-.forgot-password{
+/* .forgot-password{
     padding-left: 62px;
     margin-top: 27px;
     color: #797979;
     font-size: 18px;
+    background-color: lightgray;
 
-}
+} */
 
-.forgot-password span{
+/* .forgot-password span{
     color: #4c00b4;
     cursor: pointer;
-}
+    background-color: lightgray;
+} */
 
-.submit-container{
+
+/* .forgot-password span{
+    color: #4c00b4;
+    cursor: pointer;
+    background-color: lightgray;
+}
+ */
+ .submiting-container{
     display: flex;
     gap: 20px;
-    margin: 60px auto;
+    margin: auto;
     justify-content: center;
+    background-color: lightgray;
 }
 
-.submit{
+/* .submit{
     display: flex;
     justify-content: center;
     align-items: center;
@@ -94,7 +111,7 @@
     font-size: 19px;
     font-weight: 700;
     cursor: pointer;
-}
+}  */
 
 
 
