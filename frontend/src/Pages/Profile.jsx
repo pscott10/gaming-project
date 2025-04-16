@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import NavBar from '../components/NavBar'
-import Sidebar from '../components/Sidebar'
+import '../components/Sidebar.css'
 import '../components/Profile.css'
 import '../components/NavBar.css'
 import CreateReportModal from '../components/CreateReportModal'
