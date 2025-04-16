@@ -12,37 +12,33 @@ function CreateReport(){
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        const filters = {
-            month,
-            year,
-            municipalities,
-        };
         
+        const filters = { month, year, municipalities };
         const customColumns = customFormula 
-      ? [{ columnName: "Local Tax", formula: customFormula }] 
-      : [];
+        ? [{ columnName: "Local Tax", formula: customFormula }] 
+        : [];
         
         try{
             const response = await axios.post(
                 `${import.meta.env.VITE_API_BASE_URL}/api/reports/comprehensive`,
-                {
-                    filters,
-                    customColumns,
-                    title 
-                }
+                { filters, customColumns, title },
+                { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
             );
             console.log("Report Created:", response.data);
             alert("REPORT CREATED YAY");
             //GOTO Report Detail Page
             const reportID = response.data.reportID;
-            navigate(`/report/${reportID}`);
-        } catch (error) {
-            console.log(import.meta.env.VITE_API_BASE_URL);
-            console.error("Error creating report:", error);
-            alert("Error creating report. Please check the console for details.");
-        }
-    };
+            if (reportID) {
+                navigate(`/report/${reportID}`);
+                } else {
+                console.error("No reportID returned in response");
+                alert("Report creation succeeded, but no report ID was returned!");
+                }
+            } catch (error) {
+              console.error("Error creating report:", error.response?.data || error);
+              alert("Error creating report. Please check the console for details.");
+            }
+          };
 
     return (
         <div className="create-report-container">
@@ -85,15 +81,6 @@ function CreateReport(){
                         onChange={(e) => setMunicipalities(e.target.value)} 
                         placeholder="e.g., Clay County, Adams County" 
                         required 
-                />
-                </div>
-                <div>
-                <label>Local Tax Formula (optional):</label>
-                <input 
-                        type="text" 
-                        value={customFormula} 
-                        onChange={(e) => setCustomFormula(e.target.value)} 
-                        placeholder="e.g., FundsIn * 0.1" 
                 />
                 </div>
                 <button type="submit">Create Report</button>

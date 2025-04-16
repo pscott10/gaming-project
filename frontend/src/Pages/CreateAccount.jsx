@@ -1,15 +1,15 @@
 import React, {useState} from 'react'
-import '../components/CreateAccount.css'
-import '../components/NavBar.css'
 import {Link, useNavigate} from 'react-router-dom'
 import axios from 'axios';
+import '../components/CreateAccount.css'
+import '../components/NavBar.css'
 
 
 export function CreateAccount(){
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const[password, setPassword] = useState('');
-    const navigate = useNavigate;
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -31,7 +31,7 @@ export function CreateAccount(){
     return (
         <div className="background-body">
             <div className="nav-container">
-            <h1 className="logo">🎮 Gaming Edge</h1>
+            <h1 className="logo">Gaming Edge</h1>
             <ul>
                 <Link to="/"><button>Home</button></Link>
                 <button>About</button>
@@ -82,9 +82,14 @@ export function CreateAccount(){
             </div>
             <div className="submit-container">
                 <button type="submit" className="submit">Register</button>
-                {/* <div className="submit">Login</div> */}
             </div>
             </form>
+            <hr />
+            <div style={{marginTop: '1rem'}}>
+                <a href={`${import.meta.env.VITE_API_BASE_URL}/api/auth/google`}>
+                    <button className="oauth-button">Sign Up with Google</button>
+                </a>
+            </div>
         </div>
         </div>
     )

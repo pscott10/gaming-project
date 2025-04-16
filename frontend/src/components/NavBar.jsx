@@ -4,7 +4,7 @@ import React from 'react';
  const NavBar = () => {
      return(
          <div className="nav-container">
-             <h1 className="logo">🎮 Gaming Edge</h1>
+             <h1 className="logo">Gaming Edge</h1>
              <ul>
                  <button>Home</button>
                  <button>About</button>

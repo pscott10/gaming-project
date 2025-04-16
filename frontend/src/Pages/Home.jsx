@@ -6,7 +6,7 @@ export function Home() {
     return (
         <div className= "home-container">
             <div className="header">
-                <div className="logo2">🎮 Gaming Edge</div>
+                <div className="logo2">Gaming Edge</div>
             </div>
             <div className="buttons">
                 <ul>
