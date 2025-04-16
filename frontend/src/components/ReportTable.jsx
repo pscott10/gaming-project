@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useMemo} from 'react';
 import axios from 'axios';
 import {useParams} from 'react-router-dom';
 import { evaluate } from 'mathjs';
@@ -31,7 +31,7 @@ function ReportTable(){
     ];
 
     const [visibleColumns, setVisibleColumns] = useState(defaultColumns.map(col => col.key));
-
+    const [sortConfig, setSortConfig] = useState({key: null, direction: 'asc'});
     const[modalOpen, setModalOpen] = useState(false);
     const[newColumnName, setNewColumnName] = useState('');
     const[newFormula, setNewFormula] = useState('');
@@ -59,6 +59,39 @@ function ReportTable(){
           setLoading(false);
         });
     }, [id]);
+
+    const requestSort = (key) => {
+      let direction = 'asc';
+      if(sortConfig.key === key && sortConfig.direction === 'asc'){
+        direction = 'desc';
+      }
+      setSortConfig({key, direction});
+    }
+
+    const sortedData = useMemo(() => {
+      let sortableData = [...reportData];
+      if(sortConfig.key !== null){
+        sortableData.sort((a,b) => {
+          let x = a[sortConfig.key];
+          let y = b[sortConfig.key];
+
+          if (typeof x === 'string') {
+            x = x.toLowerCase();
+          }
+          if (typeof y === 'string') {
+            y = y.toLowerCase();
+          }
+          if (x < y) {
+            return sortConfig.direction === 'asc' ? -1 : 1;
+          }
+          if (x > y) {
+            return sortConfig.direction === 'asc' ? 1 : -1;
+          }
+          return 0;
+        });
+      }
+      return sortableData;
+    }, [reportData, sortConfig]);
 
       const handleAddCustomColumn = (e) => {
         e.preventDefault();
@@ -148,36 +181,42 @@ function ReportTable(){
             <tr>
               {/* Render default column headers only if visible */}
               {defaultColumns
+              .filter(col => visibleColumns.includes(col.key))
+              .map((col, colIndex) => (
+                <th
+                  key={colIndex}
+                  onClick={() => requestSort(col.key)}
+                  style={{ cursor: 'pointer' }}
+                >
+                  {col.label}
+                  {sortConfig.key === col.key ? (
+                    sortConfig.direction === 'asc' ? " ↑" : " ↓"
+                  ) : null}
+                </th>
+              ))}
+            {customColumns.map((col, idx) => (
+              <th key={`custom-header-${idx}`}>{col.columnName}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {sortedData.map((row, rowIndex) => (
+            <tr key={rowIndex}>
+              {defaultColumns
                 .filter(col => visibleColumns.includes(col.key))
                 .map((col, colIndex) => (
-                  <th key={colIndex}>{col.label}</th>
+                  <td key={`row-${rowIndex}-col-${colIndex}`}>{row[col.key]}</td>
                 ))}
-              {/* Render custom column headers */}
-              {customColumns.map((col, idx) => (
-                <th key={`custom-header-${idx}`}>{col.columnName}</th>
-              ))}
+              {customColumns.map((col, idx) => {
+                let computed = '';
+                try {
+                  computed = evaluate(col.formula, row);
+                } catch (error) {
+                  console.error(`Error evaluating custom column ${col.columnName} for row ${rowIndex}:`, error);
+                }
+                return <td key={`row-${rowIndex}-custom-${idx}`}>{computed}</td>;
+              })}
             </tr>
-          </thead>
-          <tbody>
-            {reportData.map((row, rowIndex) => (
-              <tr key={rowIndex}>
-                {/* Render each default column cell if the column is visible */}
-                {defaultColumns
-                  .filter(col => visibleColumns.includes(col.key))
-                  .map((col, colIndex) => (
-                    <td key={`row-${rowIndex}-col-${colIndex}`}>{row[col.key]}</td>
-                  ))}
-                {/* Render calculated values for custom columns */}
-                {customColumns.map((col, colIndex) => {
-                  let computed = '';
-                  try {
-                    computed = evaluate(col.formula, row);
-                  } catch (error) {
-                    console.error(`Error evaluating custom column ${col.columnName} for row ${rowIndex}:`, error);
-                  }
-                  return <td key={`row-${rowIndex}-custom-${colIndex}`}>{computed}</td>;
-                })}
-              </tr>
             ))}
           </tbody>
         </table>

@@ -21,14 +21,14 @@ function CreateReport(){
         try{
             const response = await axios.post(
                 `${import.meta.env.VITE_API_BASE_URL}/api/reports/comprehensive`,
-                {filters, customColumns, title}
+                { filters, customColumns, title },
+                { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
             );
             console.log("Report Created:", response.data);
             alert("REPORT CREATED YAY");
             //GOTO Report Detail Page
             const reportID = response.data.reportID;
             if (reportID) {
-                onClose(); 
                 navigate(`/report/${reportID}`);
                 } else {
                 console.error("No reportID returned in response");

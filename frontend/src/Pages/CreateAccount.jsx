@@ -31,7 +31,7 @@ export function CreateAccount(){
     return (
         <div className="background-body">
             <div className="nav-container">
-            <h1 className="logo">🎮 Gaming Edge</h1>
+            <h1 className="logo">Gaming Edge</h1>
             <ul>
                 <Link to="/"><button>Home</button></Link>
                 <button>About</button>

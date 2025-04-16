@@ -6,6 +6,7 @@ const fs = require('fs');
 const csv = require('csv-parser');
 const db = require('../database/db');
 const math = require('mathjs');
+const verifyToken = require('../middleware/verifyToken');
 
 //configure Multer to store uploads in a temp folder
 const upload = multer({
@@ -76,21 +77,21 @@ router.post('/upload', upload.single('file'), (req, res) => {
   
             try {
               results.forEach((r) => {
-                const vgtCount = parseInt(r['VGT Count']) || 0;
-                const amountPlayed = parseFloat(r['Amount Played']) || 0;
-                const amountWon = parseFloat(r['Amount Won']) || 0;
-                const netWager = parseFloat(r['Net Wager']) || 0;
-                const fundsIn = parseFloat(r['Funds In']) || 0;
-                const fundsOut = parseFloat(r['Funds Out']) || 0;
-                const netTerminalIncome = parseFloat(r['Net Terminal Income']) || 0;
-                const ntiTax = parseFloat(r['NTI Tax']) || 0;
-                const stateShare = parseFloat(r['State Share']) || 0;
+                const vgtCount = parseInt(r['VGTCount']) || 0;
+                const amountPlayed = parseFloat(r['AmountPlayed']) || 0;
+                const amountWon = parseFloat(r['AmountWon']) || 0;
+                const netWager = parseFloat(r['NetWager']) || 0;
+                const fundsIn = parseFloat(r['FundsIn']) || 0;
+                const fundsOut = parseFloat(r['FundsOut']) || 0;
+                const netTerminalIncome = parseFloat(r['NetTerminal Income']) || 0;
+                const ntiTax = parseFloat(r['NTITax']) || 0;
+                const stateShare = parseFloat(r['StateShare']) || 0;
                 const municipalityShare = parseFloat(r['Municipality Share']) || 0;
   
                 stmt.run(
                   r['Municipality'] || '',
                   r['Establishment'] || '',
-                  r['License Number'] || '',
+                  r['LicenseNumber'] || '',
                   vgtCount,
                   amountPlayed,
                   amountWon,
@@ -125,13 +126,12 @@ router.post('/upload', upload.single('file'), (req, res) => {
   });
 
   //POST /api/reports/comphrehensive
-  router.post('/comprehensive', (req, res) => {
+  router.post('/comprehensive', verifyToken, (req, res) => {
+    const userId = req.user.id;
     const { filters, customColumns, title } = req.body;
     if (!filters || !title){
         return res.status(400).json({error: 'Filters and title are required'});
     }
-
-    const userId = req.user ? req.user.id : null;
 
     let monthsArray = [];
     if (typeof filters.month === 'string') {
@@ -141,7 +141,6 @@ router.post('/upload', upload.single('file'), (req, res) => {
     }
 
     const yearValue = filters.year;
-
     let conditions = [];
     let params = [];
 
@@ -183,8 +182,76 @@ router.post('/upload', upload.single('file'), (req, res) => {
             console.error(err);
             return res.status(500).json({error: 'Database error while fetching data'});
         }
+
+        // Define a month order mapping so we can compare months numerically.
+        const monthOrder = {
+          January: 1,
+          February: 2,
+          March: 3,
+          April: 4,
+          May: 5,
+          June: 6,
+          July: 7,
+          August: 8,
+          September: 9,
+          October: 10,
+          November: 11,
+          December: 12
+        };
+
+        //console.log("Raw rows:", rows);
+        //group by license number to sum
+        const grouped = {};
+        rows.forEach(row => {
+          const license = row['LicenseNumber'] ? row['LicenseNumber'].trim() : '';
+          const currentMonthStr = row['Month'] ? row['Month'].trim() : '';
+          if (!grouped[license]) {
+            grouped[license] = { ...row };
+            // Initialize minMonth and maxMonth as the current row's month
+            grouped[license].minMonth = currentMonthStr;
+            grouped[license].maxMonth = currentMonthStr;
+          } else {
+            // Sum numeric fields
+            grouped[license]['VGTCount'] = (parseFloat(grouped[license]['VGTCount']) || 0) + (parseFloat(row['VGTCount']) || 0);
+            grouped[license]['AmountPlayed'] = (parseFloat(grouped[license]['AmountPlayed']) || 0) + (parseFloat(row['AmountPlayed']) || 0);
+            grouped[license]['AmountWon'] = (parseFloat(grouped[license]['AmountWon']) || 0) + (parseFloat(row['AmountWon']) || 0);
+            grouped[license]['NetWager'] = (parseFloat(grouped[license]['NetWager']) || 0) + (parseFloat(row['NetWager']) || 0);
+            grouped[license]['FundsIn'] = (parseFloat(grouped[license]['FundsIn']) || 0) + (parseFloat(row['FundsIn']) || 0);
+            grouped[license]['FundsOut'] = (parseFloat(grouped[license]['FundsOut']) || 0) + (parseFloat(row['FundsOut']) || 0);
+            grouped[license]['NetTerminalIncome'] = (parseFloat(grouped[license]['NetTerminalIncome']) || 0) + (parseFloat(row['NetTerminalIncome']) || 0);
+            grouped[license]['NTITax'] = (parseFloat(grouped[license]['NTITax']) || 0) + (parseFloat(row['NTITax']) || 0);
+            grouped[license]['StateShare'] = (parseFloat(grouped[license]['StateShare']) || 0) + (parseFloat(row['StateShare']) || 0);
+            grouped[license]['MunicipalityShare'] = (parseFloat(grouped[license]['MunicipalityShare']) || 0) + (parseFloat(row['MunicipalityShare']) || 0);
+      
+            // Update the month range
+            const currentMonthValue = monthOrder[currentMonthStr] || 0;
+            const minMonthValue = monthOrder[grouped[license].minMonth.trim()] || Infinity;
+            const maxMonthValue = monthOrder[grouped[license].maxMonth.trim()] || -Infinity;
+      
+            if (currentMonthValue < minMonthValue) {
+              grouped[license].minMonth = currentMonthStr;
+            }
+            if (currentMonthValue > maxMonthValue) {
+              grouped[license].maxMonth = currentMonthStr;
+            }
+          }
+        });
+
+        Object.keys(grouped).forEach(key => {
+          const minMonth = grouped[key].minMonth.trim();
+          const maxMonth = grouped[key].maxMonth.trim();
+          grouped[key]['Month'] = (minMonth === maxMonth) ? minMonth : `${minMonth} - ${maxMonth}`;
+          // Remove temporary properties if desired.
+          delete grouped[key].minMonth;
+          delete grouped[key].maxMonth;
+        });
+
+        //convert to array of aggregated rows
+        const aggregatedRows = Object.values(grouped);
+        //console.log("Aggregated rows:", aggregatedRows);  // Add this line for debugging
+
         //apply custom calcs
-        const reportData = JSON.stringify(rows);
+        const reportData = JSON.stringify(aggregatedRows);
         const filtersJSON = JSON.stringify(filters);
         const customColumnsJSON = JSON.stringify(customColumns || []);
 
@@ -204,9 +271,9 @@ router.post('/upload', upload.single('file'), (req, res) => {
                 return res.status(500).json({error: 'Error saving comprehensive report' });
             }
             return res.json({
-                message: 'Comphrehensive report created successfully',
-                reportID: this.lastID,
-                data: rows
+              message: 'Comprehensive report created successfully',
+              reportID: this.lastID,
+                data: aggregatedRows
             });
         });
     });
@@ -216,7 +283,7 @@ router.post('/upload', upload.single('file'), (req, res) => {
  * Lists ALL comprehensive reports for logged in user
  */
 router.get('/history', (req, res) => {
-    const sql = "SELECT id, title, filters, custom_columns, createAt FROM comprehensive_reports ORDER BY createdAt DESC";
+    const sql = "SELECT id, title, filters, custom_columns, createdAt FROM comprehensive_reports ORDER BY createdAt DESC";
     db.all(sql, [], (err, rows) => {
         if(err) {
             console.error(err);
