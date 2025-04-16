@@ -1,21 +1,55 @@
 .sidebar-background{
-    background-color: transparent;
-    width: flex;
+    width: fixed;
     height: 100vh;
+    background-color: lightblue;
 }
 
 .sidebar{
-    margin-top: 0px;
-    width: 0px;
-    background-color: white; 
-    float:left;
-    padding-bottom: 190px;
-    font-family: sans-serif;
+    width: 265px;
+    background-color: lightblue;
+    padding: 15px;
+    flex-shrink: 0;
+    position: flex ;
+    height: 100%;
+    border: 1px solid grey;
+}
 
+.sidebar-list{
+    background-color: lightblue;
+}
+
+.sidebar-button{
+    background-color: lightblue;
+    color: black;
+    display: flex;
+    flex-direction: row;
+    text-align: center;
 }
 
 .profile{
     font-family: sans-serif;
+    background-color: lightblue;
+    color: black;
+}
+
+.setting-icon{
+    width: 30px;
+    cursor: pointer; 
+    font-size:small;
+    display: flex;
+    flex-direction: column;
+    margin-right: 5px;
+    align-content: center;
+}
+
+.create-icon{
+    width: 20px;
+    cursor: pointer; 
+    font-size:small;
+    margin-right: 5px;
+    align-content: center;
+    background-color: white;
+    
 }
 
 

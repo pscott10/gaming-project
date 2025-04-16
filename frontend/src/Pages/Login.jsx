@@ -1,8 +1,10 @@
 import React, {useState} from 'react';
 import '../components/Login.css';
-import '../components/NavBar.css';
+import '../components/NavBar';
 import { useNavigate, Link} from 'react-router-dom';
 import axios from 'axios';
+import NavBar from '../components/NavBar';
+import CreateAccount from './CreateAccount';
 
 export function Login(){
     const [email, setEmail] = useState('');
@@ -29,16 +31,7 @@ export function Login(){
 
     return (
         <div className= "background-body">
-            <div className="nav-container">
-            <h1 className="logo">Gaming Edge</h1>
-            <ul>
-                <Link to="/"><button>Home</button></Link>
-                <button>About</button>
-                <button>Contact</button>
-                <Link to="/login"><button className="sign-in">Sign in</button></Link>
-                <Link to="/createAccount"><button className="register">Register</button></Link>
-            </ul>
-        </div>
+            <NavBar />
         <div className='login-container'>
             <div className="header">
                 <div className="text">Login</div>
@@ -63,7 +56,7 @@ export function Login(){
                 </div>
             </div>
             <div className="submit-container">
-                <button className="submit" type="submit">Login</button>
+                <button className="submit" type="submit" onClick={Login}>Login</button>
             </div>
             </form>
             <div style={{marginTop: '1rem'}}>
@@ -73,7 +66,7 @@ export function Login(){
                     </a>
             </div>
             <div className="forgot-password">Forgot Password?<span>Click Here!</span> </div>
-            <div className="forgot-password">Don't have an account?<span><Link to="/createAccount">Click Here!</Link></span> </div>
+            <div className="forgot-password">Don't have an account?<span onClick={CreateAccount}><Link to="/createAccount" className='spanCreateAccount'>Click Here!</Link></span> </div>
         </div>
         </div>
     )

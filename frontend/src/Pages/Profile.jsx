@@ -1,74 +1,81 @@
+
 import React, { useState, useEffect } from 'react';
-import NavBar from '../components/NavBar';
-import Sidebar from '../components/Sidebar';
-import '../components/Profile.css';
 import { Link, useNavigate } from 'react-router-dom';
-import CreateReportModal from '../components/CreateReportModal';
-import CreateReport from '../components/CreateReport';
 import axios from 'axios';
 
+import NavBar from '../components/NavBar';
+import Sidebar from '../components/Sidebar';
+import CreateReportModal from '../components/CreateReportModal';
+import CreateReport from '../components/CreateReport';
+import LogOut from '../components/LogOut';
+import Settings from '../components/Settings';
+
+import '../components/Profile.css'; 
 
 export function Profile() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [recentReports, setRecentReports] = useState([]); // State for reports list
-  const navigate = useNavigate();
-
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
-
   const API_BASE = import.meta.env.VITE_API_BASE_URL;
   const token    = localStorage.getItem('token');
+  const navigate = useNavigate();
 
-  // Fetch recent comprehensive reports for the logged-in user
+  // modal state
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+  const [isSettingsOpen,     setIsSettingsOpen]   = useState(false);
+  const [isLogOutOpen,       setIsLogOutOpen]     = useState(false);
+
+  // reports state
+  const [recentReports, setRecentReports] = useState([]);
+
+  // open/close helpers
+  const openReportModal = () => setIsReportModalOpen(true);
+  const closeReportModal = () => setIsReportModalOpen(false);
+  const openSettings = () => setIsSettingsOpen(true);
+  const closeSettings = () => setIsSettingsOpen(false);
+  const openLogOut = () => setIsLogOutOpen(true);
+  const closeLogOut = () => setIsLogOutOpen(false);
+  
+  // Fetch recent comprehensive reports for the logged‑in user
   useEffect(() => {
-  axios.get(
-    `${API_BASE}/api/reports/history`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  )
-  .then(res => setRecentReports(res.data))
-  .catch(console.error);
-}, []);
+    axios.get(
+      `${API_BASE}/api/reports/history`,
+      { headers: { Authorization: `Bearer ${token}` } }
+    )
+    .then(res => setRecentReports(res.data))
+    .catch(console.error);
+  }, []);
 
-  //toggle stars and sort so starred reports are at the top
+  // toggle star
   const toggleStar = (reportId, currentlyStarred) => {
     axios.patch(
       `${API_BASE}/api/reports/${reportId}/star`,
       { starred: !currentlyStarred },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      }
+      { headers: { Authorization: `Bearer ${token}` } }
     )
     .then(() => {
       setRecentReports(prev => {
         const updated = prev.map(r =>
           r.id === reportId ? { ...r, starred: !r.starred } : r
         );
+        // starred first
         updated.sort((a, b) => (b.starred === a.starred ? 0 : b.starred ? 1 : -1));
         return updated;
       });
     })
     .catch(console.error);
   };
-  
-  // get each report row
+
+  // render one row
   const renderReportRow = (report) => {
-    // extract municipalities and month range.
     let filters = {};
     try {
       filters = JSON.parse(report.filters);
-    } catch (error) {
-      console.error("Error parsing report filters", error);
+    } catch {
+      filters = {};
     }
-    const municipalities = filters.municipalities || "";
-    const month = filters.month || "";
+    const municipalities = filters.municipalities || '';
+    const monthList      = filters.month         || '';
+
     return (
-      <div 
+      <div
         key={report.id}
         className={`report-row ${report.starred ? 'starred' : ''}`}
         onClick={() => navigate(`/report/${report.id}`)}
@@ -86,11 +93,11 @@ export function Profile() {
         <div>
           <strong>{report.title}</strong>
           <div>{municipalities}</div>
-          <div>{month}</div>
+          <div>{monthList}</div>
         </div>
-        <button 
-          onClick={(e) => {
-            e.stopPropagation(); // Prevent row click from triggering navigation
+        <button
+          onClick={e => {
+            e.stopPropagation();
             toggleStar(report.id, report.starred);
           }}
           style={{
@@ -109,27 +116,46 @@ export function Profile() {
   return (
     <div className="profile-container">
       <NavBar />
+
       <div className="main-layout">
         <Sidebar />
+
         <div className="profile-content">
           <div className="profile-header">
             <div className="header-left">
               <h2 className="savedreports-header">Recent Reports</h2>
-              <button className="create-report" onClick={openModal}>Create Report</button>
+              <button className="create-report" onClick={openReportModal}>
+                Create Report
+              </button>
             </div>
+
+            <button className="sidebar-button" onClick={openSettings}>
+              Settings
+            </button>
+            <button className="sidebar-button" onClick={openLogOut}>
+              Logout
+            </button>
           </div>
-          {/*get list of recent reports*/}
+
           <div className="reports-list">
-            {recentReports.length > 0 ? (
-              recentReports.map(report => renderReportRow(report))
-            ) : (
-              <p>No recent reports</p>
-            )}
+            {recentReports.length > 0
+              ? recentReports.map(renderReportRow)
+              : <p>No recent reports</p>
+            }
           </div>
         </div>
       </div>
-      <CreateReportModal isOpen={isModalOpen} onClose={closeModal}>
+
+      <CreateReportModal isOpen={isReportModalOpen} onClose={closeReportModal}>
         <CreateReport />
+      </CreateReportModal>
+
+      <CreateReportModal isOpen={isSettingsOpen} onClose={closeSettings}>
+        <Settings />
+      </CreateReportModal>
+
+      <CreateReportModal isOpen={isLogOutOpen} onClose={closeLogOut}>
+        <LogOut />
       </CreateReportModal>
     </div>
   );
