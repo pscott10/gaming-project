@@ -151,3 +151,17 @@
         font-size: 14px;
     }
 }
+
+.report-row {
+    transition: background-color 0.3s;
+  }
+  
+  .report-row:hover {
+    background-color: #f2f2f2;
+  }
+  
+  .report-row.starred {
+    border-color: gold;
+    background-color: #fff8e1;
+  }
+  
