@@ -1,17 +1,17 @@
-import React from 'react'
+/*  import React from 'react'
 import '../components/Sidebar.css'
+import CreateReportModal from './CreateReportModal'
+import CreateReport from './CreateReport'
 
 function Sidebar(){
-    return <div className="sidebar-background">
-        <div className="sidebar">
-            <h1 className="profile">Profile</h1>
-            <ul>
-                <button className="sidebar-button">Saved Reports</button>
-                <button>History</button>
-                <button>Calculations</button>
-            </ul>
-        </div>
-    </div>
+    const[isModalOpen, setIsModalOpen] = useState(false);
+    
+        const openModal = () => setIsModalOpen(true);
+        const closeModal = () => setIsModalOpen(false);
+
+    return (
+  
+    )
 }
 
-export default Sidebar 
+export default Sidebar   */
