@@ -282,9 +282,14 @@ router.post('/upload', upload.single('file'), (req, res) => {
 /**GET /api/reports/history
  * Lists ALL comprehensive reports for logged in user
  */
-router.get('/history', (req, res) => {
-    const sql = "SELECT id, title, filters, custom_columns, createdAt FROM comprehensive_reports ORDER BY createdAt DESC";
-    db.all(sql, [], (err, rows) => {
+router.get('/history', verifyToken, (req, res) => {
+    const sql = `
+      SELECT id, title, filters, custom_columns, createdAt, starred
+      FROM comprehensive_reports
+      WHERE user_id = ? 
+      ORDER BY createdAt DESC
+      `;
+    db.all(sql, [req.user.id], (err, rows) => {
         if(err) {
             console.error(err);
             return res.status(500).json({ error: 'Database error while retrieving report history'});
@@ -307,6 +312,29 @@ router.get('/history/:id', (req, res) => {
             return res.status(404).json({error: 'Report not found'});
         }
         res.json(row);
+    });
+});
+
+//patch to unstar/star reports
+router.patch('/:id/star', verifyToken, (req, res) => {
+  const reportId = req.params.id;
+  const {starred} = req.body;
+  const val = starred ? 1 : 0;
+
+  const sql = `
+    UPDATE comprehensive_reports
+    SET starred = ?
+    WHERE id = ? AND user_id = ?
+    `;
+    db.run(sql, [val, reportId, req.user.id], function(err) {
+      if (err) {
+        console.error(err);
+        return res.status(500).json({error: 'Error updating star status' });
+      }
+      if (this.changes === 0) {
+        return res.status(404).json({error: 'Report not found'});
+      }
+      res.json({message: 'Star updated', starred});
     });
 });
 
