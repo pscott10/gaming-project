@@ -22,6 +22,8 @@ export function Home() {
             navigate('/createAccount');
         }
 
+      
+
     return (
         <>
         <div className= "home-container">

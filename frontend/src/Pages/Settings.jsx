@@ -1,4 +1,4 @@
-import React from "react";
+ import React from "react";
 import DarkMode from "../components/DarkMode";
 
 export default function Settings(){
@@ -11,4 +11,4 @@ export default function Settings(){
             </ul>
         </div>
     );
-};
+}; 
