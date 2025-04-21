@@ -300,6 +300,24 @@ router.get('/history', verifyToken, (req, res) => {
     });
 });
 
+//GET /api/reports/starred
+router.get("/starred", verifyToken, (req, res) => {
+  const sql = `
+    SELECT id, title, filters, custom_columns, createdAt, starred
+    FROM comprehensive_reports
+    WHERE user_id = ? AND starred = 1
+    ORDER BY createdAt DESC
+  `;
+  db.all(sql, [req.user.id], (err, rows) => {
+    if(err) {
+      console.error(err);
+      return res.status(500).json({error: "Database error"});
+    }
+    res.json(rows);
+  });
+});
+
+
 /**GET /api/reports/history/:id
  * Returns a specific comprehensive report by ID
  */
