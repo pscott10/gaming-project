@@ -2,11 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import NavBar from '../components/NavBar';
-import Sidebar from '../components/Sidebar';
+import '../components/Sidebar.css';
 import CreateReportModal from '../components/CreateReportModal';
 import CreateReport from '../components/CreateReport';
 import LogOut from '../components/LogOut';
+<<<<<<< HEAD
 import Settings from '../pages/Settings';
+=======
+import Settings from '../Pages/Settings';
+>>>>>>> origin/main
 
 import '../components/Profile.css'; 
 
@@ -116,8 +120,16 @@ export function Profile() {
       <NavBar />
 
       <div className="main-layout">
-        <Sidebar />
-
+      <div className="sidebar-background">
+        <div className="sidebar">
+            <h1 className="profile">Profile</h1>
+            <ul>
+                <button className="sidebar-button">Saved Reports</button>
+                <button>History</button>
+                <button>Calculations</button>
+            </ul>
+        </div>
+    </div>
         <div className="profile-content">
           <div className="profile-header">
             <div className="header-left">
@@ -135,12 +147,12 @@ export function Profile() {
             </button>
           </div>
 
-          <div className="reports-list">
+          {/* <div className="reports-list">
             {recentReports.length > 0
               ? recentReports.map(renderReportRow)
               : <p>No recent reports</p>
             }
-          </div>
+          </div> */}
         </div>
       </div>
 

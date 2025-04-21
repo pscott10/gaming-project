@@ -7,8 +7,14 @@ import {Login} from './pages/Login'
 import {Profile} from './pages/Profile'
 import Charts from './pages/Charts'
 import CreateReport from './components/CreateReport';
+<<<<<<< HEAD
 import ReportTable from './pages/ReportTable';
 import CreateReportModal from './components/CreateReportModal'
+=======
+import ReportTable from './components/ReportTable';
+import CreateReportModal from './components/CreateReportModal';
+import About from './Pages/About'; 
+>>>>>>> origin/main
 
 
 function App(){
@@ -21,6 +27,7 @@ function App(){
      <Route path="/createAccount" element={<CreateAccount/>} />
       <Route path="/login" element={<Login/>} />
       <Route path="/profile" element={<Profile/>} />
+      <Route path="/about" element={<About/>} />
       <Route path="/createReport" element={<CreateReport />} />
       <Route path="/report/:id" element={<ReportTable/>} />
       <Route path="/createReportModal" element={<CreateReportModal/>} />
