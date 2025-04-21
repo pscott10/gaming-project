@@ -1,7 +1,7 @@
 import React, {useEffect, useState, useMemo} from 'react';
 import axios from 'axios';
 import {useParams} from 'react-router-dom';
-import { evaluate } from 'mathjs';
+//import { evaluate } from 'mathjs';
 import CreateReportModal from './CreateReportModal';
 
 function ReportTable(){

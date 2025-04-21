@@ -7,7 +7,8 @@ import {Login} from './pages/Login'
 import {Profile} from './pages/Profile'
 import CreateReport from './components/CreateReport';
 import ReportTable from './components/ReportTable';
-import CreateReportModal from './components/CreateReportModal'
+import CreateReportModal from './components/CreateReportModal';
+import About from './Pages/About'; 
 
 
 function App(){
@@ -20,6 +21,7 @@ function App(){
      <Route path="/createAccount" element={<CreateAccount/>} />
       <Route path="/login" element={<Login/>} />
       <Route path="/profile" element={<Profile/>} />
+      <Route path="/about" element={<About/>} />
       <Route path="/createReport" element={<CreateReport />} />
       <Route path="/report/:id" element={<ReportTable/>} />
       <Route path="/createReportModal" element={<CreateReportModal/>} />
