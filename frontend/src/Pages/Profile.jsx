@@ -1,15 +1,12 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-
 import NavBar from '../components/NavBar';
 import '../components/Sidebar.css';
 import CreateReportModal from '../components/CreateReportModal';
 import CreateReport from '../components/CreateReport';
 import LogOut from '../components/LogOut';
 import Settings from '../Pages/Settings';
-
 import '../components/Profile.css'; 
 
 export function Profile() {

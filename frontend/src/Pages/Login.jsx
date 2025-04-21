@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import '../components/Login.css';
-import '../components/NavBar';
 import { useNavigate, Link} from 'react-router-dom';
 import axios from 'axios';
 import NavBar from '../components/NavBar';
@@ -27,7 +26,6 @@ export function Login(){
             alert("Login failed. Please check your credentials.");
         }
     };
-
 
     return (
         <div className= "background-body">
@@ -56,7 +54,7 @@ export function Login(){
                 </div>
             </div>
             <div className="submit-container">
-                <button className="submit" type="submit" onClick={Login}>Login</button>
+                <button className="submit" type="submit">Login</button>
             </div>
             </form>
             <div style={{marginTop: '1rem'}}>
@@ -66,7 +64,7 @@ export function Login(){
                     </a>
             </div>
             <div className="forgot-password">Forgot Password?<span>Click Here!</span> </div>
-            <div className="forgot-password">Don't have an account?<span onClick={CreateAccount}><Link to="/createAccount" className='spanCreateAccount'>Click Here!</Link></span> </div>
+            <div className="forgot-password">Don't have an account?<Link to="/createAccount" className='spanCreateAccount'>Click Here!</Link> </div>
         </div>
         </div>
     )

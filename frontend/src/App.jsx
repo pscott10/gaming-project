@@ -5,10 +5,12 @@ import {Home} from './Pages/Home'
 import {CreateAccount} from './pages/CreateAccount'
 import {Login} from './pages/Login'
 import {Profile} from './pages/Profile'
+import Charts from './pages/Charts'
 import CreateReport from './components/CreateReport';
-import ReportTable from './components/ReportTable';
+import ReportTable from './pages/ReportTable';
 import CreateReportModal from './components/CreateReportModal';
 import About from './Pages/About'; 
+
 
 
 function App(){
@@ -25,6 +27,7 @@ function App(){
       <Route path="/createReport" element={<CreateReport />} />
       <Route path="/report/:id" element={<ReportTable/>} />
       <Route path="/createReportModal" element={<CreateReportModal/>} />
+      <Route path="/charts" element={<Charts/>} />
       </Routes>
     </Router>
   )

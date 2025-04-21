@@ -1,92 +1,107 @@
-import React, { useState} from 'react';
+import React, { useEffect, useState} from 'react';
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
+import DatePicker from "react-datepicker";
+import Select from "react-select";
+import "react-datepicker/dist/react-datepicker.css";
+import "../components/CreateReportModal.css";
 
 function CreateReport(){
     const [title, setTitle] = useState('');
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
     const [month, setMonth] = useState('');
     const [year, setYear] = useState('');
-    const [municipalities, setMunicipalities] = useState('');
-    const [customFormula, setCustomFormula] = useState('');
+    const [municipalityOptions, setMunicipalityOptions] = useState([]);
+    const [selectedMunicipalities, setSelectedMunicipalities] = useState([]);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        axios
+          .get(`${import.meta.env.VITE_API_BASE_URL}/api/reports/municipalities`, {
+            headers: { Authorization: `Bearer ${token}` }
+          })
+          .then(res => {
+            const opts = res.data.map(muni => ({ label: muni, value: muni }));
+            setMunicipalityOptions(opts);
+          })
+          .catch(console.error);
+      }, []);
+      
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
-        const filters = { month, year, municipalities };
-        const customColumns = customFormula 
-        ? [{ columnName: "Local Tax", formula: customFormula }] 
-        : [];
-        
-        try{
-            const response = await axios.post(
-                `${import.meta.env.VITE_API_BASE_URL}/api/reports/comprehensive`,
-                { filters, customColumns, title },
-                { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
-            );
-            console.log("Report Created:", response.data);
-            alert("REPORT CREATED YAY");
-            //GOTO Report Detail Page
-            const reportID = response.data.reportID;
-            if (reportID) {
-                navigate(`/report/${reportID}`);
-                } else {
-                console.error("No reportID returned in response");
-                alert("Report creation succeeded, but no report ID was returned!");
-                }
-            } catch (error) {
-              console.error("Error creating report:", error.response?.data || error);
-              alert("Error creating report. Please check the console for details.");
-            }
-          };
+        const monthNames = date =>
+          date.toLocaleString("default", { month: "long" });
+        const filters = {
+          month: [monthNames(startDate), monthNames(endDate)],
+          year: startDate.getFullYear(),
+          municipalities: selectedMunicipalities.map(opt=>opt.value)
+        };
+        try {
+          const response = await axios.post(
+            `${import.meta.env.VITE_API_BASE_URL}/api/reports/comprehensive`,
+            { filters, customColumns: [], title },
+            { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
+          );
+          navigate(`/report/${response.data.reportID}`);
+        } catch (err) {
+          console.error(err);
+        alert("Error creating report");
+        }
+    };
 
     return (
-        <div className="create-report-container">
+        <div className="create-report-form">
             <h1>Create Comprehensive Report</h1>
             <form onSubmit={handleSubmit}>
-                <div>
-                    <label>Report Title:</label>
-                    <input
-                        type="text"
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                        required
-                    />
-                </div>
-                <div>
-                    <label>Month:</label>
-                    <input  
-                        type="text"
-                        value={month}
-                        onChange={(e) => setMonth(e.target.value)}
-                        placeholder="e.g., January"
-                        required
-                    />
-                </div>
-                <div>
-                <label>Year:</label>
-                    <input 
-                        type="text" 
-                        value={year} 
-                        onChange={(e) => setYear(e.target.value)} 
-                        placeholder="e.g., 2024" 
-                        required 
-                    />
-                    </div>
-                <div>
-                <label>Municipalities (comma-separated):</label>
-                <input 
-                        type="text" 
-                        value={municipalities} 
-                        onChange={(e) => setMunicipalities(e.target.value)} 
-                        placeholder="e.g., Clay County, Adams County" 
-                        required 
+            <label>
+                Report Title
+                <input
+                    value={title}
+                    onChange={e=>setTitle(e.target.value)}
+                    required
                 />
-                </div>
-                <button type="submit">Create Report</button>
-            </form>
-        </div>   
-    );
+            </label>
+
+            <label>
+                Start Month & Year
+                <DatePicker
+                    selected={startDate}
+                    onChange={setStartDate}
+                    dateFormat="MMMM yyyy"
+                    showMonthYearPicker                        placeholderText="Select start month"
+                    required
+                />
+            </label>
+
+            <label>
+                End Month & Year
+                <DatePicker
+                selected={endDate}
+                onChange={setEndDate}
+                dateFormat="MMMM yyyy"
+                showMonthYearPicker
+                placeholderText="Select end month"
+                required
+                />
+            </label>
+
+            <label>Municipalities</label>
+            <Select
+                isMulti
+                options={municipalityOptions}
+                value={selectedMunicipalities}
+                onChange={setSelectedMunicipalities}
+                placeholder="Type to search..."
+            />
+            <button type="submit" className="submit-report-btn">
+        Create Report
+      </button>
+    </form>
+    </div>
+  );
 }
 
 export default CreateReport;
