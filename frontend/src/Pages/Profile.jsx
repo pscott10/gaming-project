@@ -6,12 +6,7 @@ import '../components/Sidebar.css';
 import CreateReportModal from '../components/CreateReportModal';
 import CreateReport from '../components/CreateReport';
 import LogOut from '../components/LogOut';
-<<<<<<< HEAD
-import Settings from '../pages/Settings';
-=======
 import Settings from '../Pages/Settings';
->>>>>>> origin/main
-
 import '../components/Profile.css'; 
 
 export function Profile() {

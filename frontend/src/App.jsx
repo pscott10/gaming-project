@@ -7,14 +7,10 @@ import {Login} from './pages/Login'
 import {Profile} from './pages/Profile'
 import Charts from './pages/Charts'
 import CreateReport from './components/CreateReport';
-<<<<<<< HEAD
 import ReportTable from './pages/ReportTable';
-import CreateReportModal from './components/CreateReportModal'
-=======
-import ReportTable from './components/ReportTable';
 import CreateReportModal from './components/CreateReportModal';
 import About from './Pages/About'; 
->>>>>>> origin/main
+
 
 
 function App(){
