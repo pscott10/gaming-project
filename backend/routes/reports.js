@@ -261,11 +261,13 @@ router.post('/upload', upload.single('file'), (req, res) => {
                 title,
                 filters,
                 custom_columns,
+                hidden_columns,
+                notes,
                 data
-            ) VALUES (?, ?, ?, ?, ?)
+            ) VALUES (?, ?, ?, ?, ?, ?, ?)
         `;
 
-        db.run(insertSql, [userId, title, filtersJSON, customColumnsJSON, reportData], function(insertErr) {
+        db.run(insertSql, [userId, title, filtersJSON, customColumnsJSON, JSON.stringify([]), "",reportData], function(insertErr) {
             if (insertErr) {
                 console.error(insertErr);
                 return res.status(500).json({error: 'Error saving comprehensive report' });
@@ -284,7 +286,7 @@ router.post('/upload', upload.single('file'), (req, res) => {
  */
 router.get('/history', verifyToken, (req, res) => {
     const sql = `
-      SELECT id, title, filters, custom_columns, createdAt, starred
+      SELECT id, title, filters, custom_columns, hidden_columns, createdAt, starred
       FROM comprehensive_reports
       WHERE user_id = ? 
       ORDER BY createdAt DESC
@@ -315,6 +317,23 @@ router.get('/history/:id', (req, res) => {
     });
 });
 
+//GET /api/municipalities
+router.get("/municipalities", verifyToken, (req, res) => {
+  const sql = `
+    SELECT DISTINCT Municipality 
+      FROM gaming_data 
+    ORDER BY Municipality
+  `;
+  db.all(sql, [], (err, rows) => {
+    if (err) {
+      console.error("DB error fetching municipalities:", err);
+      return res.status(500).json({ error: "Database error" });
+    }
+    const list = rows.map((r) => r.Municipality);
+    res.json(list);
+  });
+});
+
 //patch to unstar/star reports
 router.patch('/:id/star', verifyToken, (req, res) => {
   const reportId = req.params.id;
@@ -337,5 +356,65 @@ router.patch('/:id/star', verifyToken, (req, res) => {
       res.json({message: 'Star updated', starred});
     });
 });
+
+//patch for hidden reports
+router.patch('/:id/hidden', verifyToken, (req, res) => {
+  const reportId = req.params.id;
+  const hiddenJSON = JSON.stringify(req.body.hiddenColumns || []);
+  const sql = `
+    UPDATE comprehensive_reports
+      SET hidden_columns = ?
+    WHERE id = ? AND user_id = ?
+  `;
+  db.run(sql, [hiddenJSON, reportId, req.user.id], function(err) {
+    if (err) return res.status(500).json({ error: 'DB error updating hidden columns' });
+    if (this.changes === 0) return res.status(404).json({ error: 'Report not found' });
+    res.json({ hiddenColumns: req.body.hiddenColumns });
+  });
+});
+
+//patch to update notes
+router.patch('/:id/notes', verifyToken, (req, res) => {
+  const reportId = req.params.id;
+  const {notes} = req.body;
+  const sql = `
+    UPDATE comprehensive_reports
+      SET notes = ?
+    WHERE id = ? AND user_id = ?
+  `;
+  db.run(sql, [notes, reportId, req.user.id], function(err) {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: 'Could not save notes' });
+    }
+    if (this.changes === 0) {
+      return res.status(404).json({ error: 'Report not found' });
+    }
+    res.json({ message: 'Notes saved', notes });
+  });
+});
+
+// patch for custom_columns
+router.patch(
+  '/:id/custom-columns',
+  verifyToken,
+  (req, res) => {
+    const reportId = req.params.id;
+    const { customColumns } = req.body;
+    const json = JSON.stringify(customColumns || []);
+    const sql = `
+      UPDATE comprehensive_reports
+      SET custom_columns = ?
+      WHERE id = ? AND user_id = ?
+    `;
+    db.run(sql, [json, reportId, req.user.id], function(err) {
+      if (err) return res.status(500).json({ error: 'DB error' });
+      if (this.changes === 0)
+        return res.status(404).json({ error: 'Report not found' });
+      res.json({ message: 'Custom columns updated' });
+    });
+  }
+);
+
 
 module.exports = router;
