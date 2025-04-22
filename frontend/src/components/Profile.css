@@ -47,7 +47,6 @@
     display: flex;
     justify-content: space-between;
     margin-bottom: 20px;
-    margin-left: 50px;
     gap: 20px;
     flex-direction: column;
     font-family: sans-serif;
@@ -62,9 +61,9 @@
 }
 
 .savedreports-header{
-    font-size: 30px;
+    font-size: 36px;
     font-weight: bold;
-    margin-right: 100px;
+    margin-right: 50px;
     padding-top: 10px;
     background-color: lightgray;
 }
@@ -109,6 +108,12 @@
 
 .report-list:hover{
     background-color: grey;
+}
+
+.reports-list{
+    font-family: sans-serif;
+    font-size: medium;
+    margin: 9px;
 }
 
 @media screen and (max-width: 760px){
