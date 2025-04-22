@@ -1,8 +1,7 @@
  .background-body{
-    background-color: #020265;
     width: justify;
-    padding-bottom: 500px
 }   
+
 /*Puts form left center*/
  .account-container{
     display: flex;
@@ -12,6 +11,7 @@
     width: 600px;
     background-color: lightgray;
     padding-bottom: 30px;
+    border: 1px solid black;
 }
  
 /*Puts "Sign up" in the center*/
@@ -46,51 +46,6 @@
     background-color: lightgrey;
 }  
 
-/*Creates boxes and puts input in center */
-/* .input{
-    display: flex;
-    align-items: center;
-    margin: auto;
-    width: 480px;
-    height: 80px;
-    background: #eaeaea;
-    border-radius: 6px;
-} */
-
-/*Text inside input boxes*/
-/* .input input{
-    height: 50px;
-    width: 400px;
-    background: transparent;
-    border: none;
-    outline: none;
-    color: #797979;
-    font-size: 19px;
-} */
-
-/*"lost password, click here!*/
-/* .forgot-password{
-    padding-left: 62px;
-    margin-top: 27px;
-    color: #797979;
-    font-size: 18px;
-    background-color: lightgray;
-
-} */
-
-/* .forgot-password span{
-    color: #4c00b4;
-    cursor: pointer;
-    background-color: lightgray;
-} */
-
-
-/* .forgot-password span{
-    color: #4c00b4;
-    cursor: pointer;
-    background-color: lightgray;
-}
- */
  .submiting-container{
     display: flex;
     gap: 20px;
@@ -99,19 +54,7 @@
     background-color: lightgray;
 }
 
-/* .submit{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 220px;
-    height: 59px;
-    color: #fff;
-    background: #1e1e1e;
-    border-radius: 50px;
-    font-size: 19px;
-    font-weight: 700;
-    cursor: pointer;
-}  */
+
 
 
 
