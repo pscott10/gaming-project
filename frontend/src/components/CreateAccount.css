@@ -1,8 +1,7 @@
  .background-body{
-    background-color: #020265;
     width: justify;
-    padding-bottom: 500px
 }   
+
 /*Puts form left center*/
  .account-container{
     display: flex;
@@ -12,6 +11,7 @@
     width: 600px;
     background-color: lightgray;
     padding-bottom: 30px;
+    border: 1px solid black;
 }
  
 /*Puts "Sign up" in the center*/
