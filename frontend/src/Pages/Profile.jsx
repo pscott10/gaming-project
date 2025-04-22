@@ -24,6 +24,7 @@ function Profile() {
 
   // reports state
   const [starredReports, setStarredReports] = useState([]);
+  const [recentReports, setRecentReports] = useState([]);
 
   // open/close helpers
   const openReportModal = () => setIsReportModalOpen(true);
@@ -37,9 +38,11 @@ function Profile() {
   useEffect(() => {
     axios.get(
       `${API_BASE}/api/reports/starred`,
-      { headers: { Authorization: `Bearer ${token}` } }
-    )
-    .then(res => setStarredReports(res.data))
+      { headers: { Authorization: `Bearer ${token}` },
+  })
+    .then((res) =>{
+      setStarredReports(Array.isArray(res.data) ? res.data : []);
+    })
     .catch(console.error);
   }, [API_BASE, token]);
 
@@ -56,9 +59,9 @@ function Profile() {
         );
       })
       .catch(console.error);
-};
 
-   {/* axios.patch(
+
+    axios.patch(
       `${API_BASE}/api/reports/${reportId}/star`,
       { starred: !currentlyStarred },
       { headers: { Authorization: `Bearer ${token}` } }
@@ -74,7 +77,7 @@ function Profile() {
       });
     })
     .catch(console.error);
-  }; */}
+  }; 
 
   // render one row
   const renderRow = (report) => {
@@ -130,17 +133,8 @@ function Profile() {
     <div className="profile-container">
       <NavBar />
       <div className="main-layout">
-        <Sidebar />
-        {/*<div className="sidebar-background">
-        <div className="sidebar">
-            <h1 className="profile">Profile</h1>
-            <ul>
-                <button className="sidebar-button">Starred Reports</button>
-                <button>History</button>
-                <button>Calculations</button>
-            </ul>
-        </div>
-      </div>*/}
+      <Sidebar />
+
       <div className="profile-content">
         <div className="profile-header">
           <div className="header-left">
@@ -150,12 +144,7 @@ function Profile() {
             </button>
           </div>
 
-          <button className="sidebar-button" onClick={openSettings}>
-            Settings
-          </button>
-          <button className="sidebar-button" onClick={openLogOut}>
-            Logout
-          </button>
+        
         </div>
 
         {/*List of starred reports*/}
@@ -167,12 +156,12 @@ function Profile() {
           )}
         </div>
 
-        {/* <div className="reports-list">
+         <div className="reports-list">
       {recentReports.length > 0
-        ? recentReports.map(renderReportRow)
+        ? recentReports.map(renderRow)
         : <p>No recent reports</p>
       }
-    </div> */}
+    </div> 
       </div>
       </div>
       <CreateReportModal isOpen={isReportModalOpen} onClose={closeReportModal}>
@@ -187,6 +176,5 @@ function Profile() {
     </div>
   );
 };
-
 
 export default Profile;
