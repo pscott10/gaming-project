@@ -65,22 +65,19 @@ export function CreateAccount(){
                     />
                 </div>
             </div>
-            <div className="forgot-password">
-                Already have an account?
-                <span>
-                    <Link to="/login" className='forgetSpan'> Click Here!</Link>
-                </span> 
-            </div>
             <div className="submiting-container">
                 <button type="submit" className="submit">Register</button>
-            </div>
-            </form>
-            <hr />
-            <div style={{marginTop: '1rem'}}>
                 <a href={`${import.meta.env.VITE_API_BASE_URL}/api/auth/google`}>
-                    <button className="oauth-button">Sign Up with Google</button>
+                    <button className="oauth-button">Google</button>
                 </a>
             </div>
+            </form>
+            <div className="forgot-password">
+                <span>
+                    <Link to="/login" className='forgetSpan'> Already have an account?</Link>
+                </span> 
+            </div>
+            
         </div>
         </div>
     )
