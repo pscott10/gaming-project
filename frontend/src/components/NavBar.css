@@ -19,6 +19,12 @@
 
 }
 
+.machine-icon{
+    width: 50px;
+    font-size: large;
+    margin-right: 5px;
+}
+
 .ul{
     display: flex;
     flex-direction: column;
