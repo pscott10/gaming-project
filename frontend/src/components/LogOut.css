@@ -1,0 +1,27 @@
+.logout-container{
+    font-family: sans-serif;
+}
+
+.logout-header{
+    color: black;
+    margin-bottom: 20px;
+}
+
+.confirm-logout{
+    background-color: black;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    border: 1px solid black; 
+    font-family: sans-serif;
+    justify-content: center;
+    align-items: center;
+    width: 220px;
+    border-radius: 50px;
+    font-size: 19px;
+}
+
+.logout-list{
+    background: transparent;
+    margin-top: 15px;
+}
