@@ -19,7 +19,7 @@ export function Login(){
             );
             console.log("Login successful:", response.data);
             localStorage.setItem('token', response.data.token);
-            alert("Login successful");
+            //alert("Login successful");
             navigate('/profile');
         } catch (error){
             console.error("Login error:", error.response.data);

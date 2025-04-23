@@ -108,7 +108,7 @@ router.post('/upload', upload.single('file'), (req, res) => {
               });
               stmt.finalize();
               db.run('COMMIT', () => {
-                fs.unlinkSync(req.file.path);
+              fs.unlinkSync(req.file.path);
                 return res.json({ message: `Successfully uploaded ${results.length} rows` });
               });
             } catch (err) {
@@ -240,15 +240,14 @@ router.post('/upload', upload.single('file'), (req, res) => {
         Object.keys(grouped).forEach(key => {
           const minMonth = grouped[key].minMonth.trim();
           const maxMonth = grouped[key].maxMonth.trim();
-          grouped[key]['Month'] = (minMonth === maxMonth) ? minMonth : `${minMonth} - ${maxMonth}`;
-          // Remove temporary properties if desired.
+          grouped[key]['Month'] = 
+            (minMonth === maxMonth) ? minMonth : `${minMonth} : ${maxMonth}`;
           delete grouped[key].minMonth;
           delete grouped[key].maxMonth;
         });
 
         //convert to array of aggregated rows
         const aggregatedRows = Object.values(grouped);
-        //console.log("Aggregated rows:", aggregatedRows);  // Add this line for debugging
 
         //apply custom calcs
         const reportData = JSON.stringify(aggregatedRows);

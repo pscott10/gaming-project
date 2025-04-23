@@ -44,6 +44,13 @@ function ReportTable(){
       //{ key: "Year", label: "Year" },
     ];
 
+    const monthOrder = {
+      January:  1, February: 2, March:      3,
+      April:    4, May:       5, June:      6,
+      July:     7, August:    8, September: 9,
+      October: 10, November: 11, December: 12,
+    };
+
     useEffect(() => {
       const token = localStorage.getItem("token");
       axios
@@ -72,6 +79,12 @@ function ReportTable(){
         .finally(() => setLoading(false));
     }, [id]);
     
+    const formatMonthRange = (input) => {
+      const arr = Array.isArray(input) ? input : [input];
+      if(!arr.length) return "";
+      const sorted = [...arr].sort((a,b) => monthOrder[a] = monthOrder[b]);
+      return sorted.length === 1 ? sorted[0] : `${sorted[0]} - ${sorted[sorted.length - 1]}`;
+    };
 
     //sorting data
     const requestSort = (key) => {
@@ -240,10 +253,10 @@ function ReportTable(){
         <button className="back-btn" onClick={() => navigate('/profile')}>← Back</button>
         <h1 className="rt-title">{reportInfo?.title}</h1>
         {reportInfo?.filters && (() => {
-          const {month, year} = JSON.parse(reportInfo.filters);
+          const { month, year } = JSON.parse(reportInfo.filters);
           return (
             <div className="rt-subtitle">
-              <span className="rt-months">{month}</span>
+              <span className="rt-months">{formatMonthRange(month)}</span>
               <span className="rt-year">{year}</span>
             </div>
           );

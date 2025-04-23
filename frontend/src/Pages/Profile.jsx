@@ -151,10 +151,10 @@ function Profile() {
         </div>
 
          <div className="reports-list">
-      {recentReports.length > 0
+      {/*{recentReports.length > 0
         ? recentReports.map(renderRow)
         : <p>No recent reports</p>
-      }
+      }*/}
     </div> 
       </div>
       </div>
