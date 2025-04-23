@@ -36,7 +36,7 @@ function Sidebar() {
           <div className="sidebar">
             <h1 className="profile">Welcome, User</h1>
             <ul className="sidebar-list">
-              <li><button className="sidebar-button" onClick={recentReports}>Recent Reports</button></li>
+              <li><button className="sidebar-button" onClick={recentReports}>Profile</button></li>
               <li><button className="sidebar-button" onClick={history}>History</button></li>
               <li><button className="sidebar-button" onClick={charts}>Charts &amp; Graphs</button></li>
               <li><button className="sidebar-button" onclick={openSettings}>Settings</button></li>
