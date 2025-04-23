@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom';
 import './Sidebar.css';
 import { useNavigate } from 'react-router-dom';
 import Settings from '../Pages/Settings';
+import LogOut from '../components/LogOut';
 import CreateReportModal from '../components/CreateReportModal'
 
 
@@ -11,9 +12,12 @@ function Sidebar() {
   const navigate = useNavigate();
 
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isLogOutOpen, setIsLogOutOpen]     = useState(false);
 
   const openSettings = () => setIsSettingsOpen(true);
   const closeSettings = () => setIsSettingsOpen(false);
+  const openLogOut = () => setIsLogOutOpen(true);
+  const closeLogOut = () => setIsLogOutOpen(false);
     
         const recentReports = () => {
             navigate('/profile');
@@ -26,10 +30,6 @@ function Sidebar() {
         const charts = () => {
           navigate('/charts');
         }
-        
-        const logOut = () => {
-          navigate('logout');
-        }
 
     return (
         <div className="sidebar-background">
@@ -39,14 +39,17 @@ function Sidebar() {
               <li><button className="sidebar-button" onClick={recentReports}>Recent Reports</button></li>
               <li><button className="sidebar-button" onClick={history}>History</button></li>
               <li><button className="sidebar-button" onClick={charts}>Charts &amp; Graphs</button></li>
-              <li><button className="sidebar-button" onclick={openSettings}>Settings</button></li>
-              <li><button className="sidebar-button" onClick={logOut}>Logout</button></li>
+              <li><button className="sidebar-button" onClick={openSettings}>Settings</button></li>
+              <li><button className="sidebar-button" onClick={openLogOut}>Logout</button></li>
             </ul>
-            
-          </div>
-          <CreateReportModal isOpen={isSettingsOpen} onClose={closeSettings}>
+        <CreateReportModal isOpen={isSettingsOpen} onClose={closeSettings}>
         <Settings />
         </CreateReportModal>
+        <CreateReportModal isOpen={isLogOutOpen} onClose={closeLogOut}>
+        <LogOut />
+      </CreateReportModal>
+          </div>
+          
         </div>
         
     );

@@ -5,8 +5,6 @@ import NavBar from '../components/NavBar';
 import Sidebar from '../components/Sidebar';
 import CreateReportModal from '../components/CreateReportModal';
 import CreateReport from '../components/CreateReport';
-import LogOut from '../components/LogOut';
-import Settings from '../Pages/Settings';
 import '../components/Profile.css'; 
 import '../components/Sidebar.css';
 import { toggleStarRequest } from '../components/starReports';
@@ -19,8 +17,7 @@ function Profile() {
 
   // modal state
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
-  const [isSettingsOpen,     setIsSettingsOpen]   = useState(false);
-  const [isLogOutOpen,       setIsLogOutOpen]     = useState(false);
+  
 
   // reports state
   const [starredReports, setStarredReports] = useState([]);
@@ -29,10 +26,7 @@ function Profile() {
   // open/close helpers
   const openReportModal = () => setIsReportModalOpen(true);
   const closeReportModal = () => setIsReportModalOpen(false);
-  const openSettings = () => setIsSettingsOpen(true);
-  const closeSettings = () => setIsSettingsOpen(false);
-  const openLogOut = () => setIsLogOutOpen(true);
-  const closeLogOut = () => setIsLogOutOpen(false);
+  
   
   // Fetch starred comprehensive reports for the logged‑in user
   useEffect(() => {
@@ -167,12 +161,8 @@ function Profile() {
       <CreateReportModal isOpen={isReportModalOpen} onClose={closeReportModal}>
         <CreateReport />
       </CreateReportModal>
-      <CreateReportModal isOpen={isSettingsOpen} onClose={closeSettings}>
-        <Settings />
-      </CreateReportModal>
-      <CreateReportModal isOpen={isLogOutOpen} onClose={closeLogOut}>
-        <LogOut />
-      </CreateReportModal>
+  
+      
     </div>
   );
 };
