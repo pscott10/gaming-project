@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import { NavLink } from 'react-router-dom';
 import './Sidebar.css';
 import { useNavigate } from 'react-router-dom';
-import Settings from '../Pages/Settings';
+//import Settings from '../Pages/Settings';
 import LogOut from '../components/LogOut';
 import CreateReportModal from '../components/CreateReportModal'
 
@@ -11,11 +11,11 @@ function Sidebar() {
 
   const navigate = useNavigate();
 
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  //const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isLogOutOpen, setIsLogOutOpen]     = useState(false);
 
-  const openSettings = () => setIsSettingsOpen(true);
-  const closeSettings = () => setIsSettingsOpen(false);
+  //const openSettings = () => setIsSettingsOpen(true);
+  //const closeSettings = () => setIsSettingsOpen(false);
   const openLogOut = () => setIsLogOutOpen(true);
   const closeLogOut = () => setIsLogOutOpen(false);
     
@@ -31,6 +31,10 @@ function Sidebar() {
           navigate('/charts');
         }
 
+        const settings = () => {
+          navigate('/settings');
+        }
+
     return (
         <div className="sidebar-background">
           <div className="sidebar">
@@ -39,18 +43,19 @@ function Sidebar() {
               <li><button className="sidebar-button" onClick={recentReports}>Recent Reports</button></li>
               <li><button className="sidebar-button" onClick={history}>History</button></li>
               <li><button className="sidebar-button" onClick={charts}>Charts &amp; Graphs</button></li>
-              <li><button className="sidebar-button" onClick={openSettings}>Settings</button></li>
+              <li><button className="sidebar-button" onClick={settings}>Settings</button></li>
               <li><button className="sidebar-button" onClick={openLogOut}>Logout</button></li>
             </ul>
-        <CreateReportModal isOpen={isSettingsOpen} onClose={closeSettings}>
+       {/*  <CreateReportModal isOpen={isSettingsOpen} onClose={closeSettings}>
         <Settings />
-        </CreateReportModal>
+        </CreateReportModal> */}
         <CreateReportModal isOpen={isLogOutOpen} onClose={closeLogOut}>
         <LogOut />
       </CreateReportModal>
           </div>
           
         </div>
+
         
     );
 }

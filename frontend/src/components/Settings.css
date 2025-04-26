@@ -1,8 +1,18 @@
 .settings-container{
-    background-color: grey; 
+    display: flex; 
+    flex-direction: column;
+    height: 100vh; 
+}
+
+.settings-layout{
+    display: flex;
+    flex: 1; 
+    flex-wrap: nowrap; 
+    height: 100%;
 }
 
 .welcome-header{
     font-family: sans-serif;
     color: black;
 }
+

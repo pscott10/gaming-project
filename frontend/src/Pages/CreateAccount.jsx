@@ -14,11 +14,11 @@ export function CreateAccount(){
     const handleSubmit = async (e) => {
         e.preventDefault();
         try{
-            const reponse = await axios.post(
+            const response = await axios.post(
                 `${import.meta.env.VITE_API_BASE_URL}/api/auth/signup`,
                 {name, email, password}
             );
-            console.log("Signup successful:", Response.data);
+            console.log("Signup successful:", response.data);
             alert("Account created successfully! Continue to log in.");
             navigate('/login');
         } catch (error){

@@ -11,6 +11,7 @@ import ReportTable from './pages/ReportTable';
 import CreateReportModal from './components/CreateReportModal';
 import About from './Pages/About'; 
 import History from './pages/History';
+import Settings from './Pages/Settings';
 
 
 
@@ -30,6 +31,7 @@ function App(){
       <Route path="/createReportModal" element={<CreateReportModal/>} />
       <Route path="/charts" element={<Charts/>} />
       <Route path="/history" element={<History/>} />
+      <Route path="/settings" element={<Settings/>} />
       </Routes>
     </Router>
   )
