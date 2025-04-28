@@ -7,9 +7,20 @@
     color: black;
 }
 
-.set-tabs button.active {
-    border-bottom:2px solid #007bff; 
+.account-settings{
+    color: black;
+}
+
+.set-tabs button{
+    color: black;
+    display: flex;
+    border-radius: 50px;
+}
+
+.set-tabs button.active { 
     font-weight:600; 
+    background-color: hsl(199, 100%, 75%); 
+    color: black;
 }
 .set-form  label { 
     display:flex; 
@@ -23,9 +34,18 @@
     border-radius:4px; 
     color: black;
 }
+
+.save-settings{
+    background-color: black;
+    color: white; 
+    border-radius: 50px;
+}
+
 .danger { 
     background:#b00020; 
     color:#fff; 
     padding:.5rem 1rem; 
     border:none; 
 }
+
+
