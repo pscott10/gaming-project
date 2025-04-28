@@ -19,7 +19,7 @@ export function CreateAccount(){
                 {name, email, password}
             );
             console.log("Signup successful:", Response.data);
-            alert("Account created successfully! Continue to log in.");
+            //alert("Account created successfully! Continue to log in.");
             navigate('/login');
         } catch (error){
             console.error("Signup error:", error.response?.data || error);

@@ -1,71 +1,105 @@
-import {useEffect, useState} from "react";
-import axios from "axios";
-import {useNavigate} from "react-router-dom";
-import NavBar from "../components/NavBar";
-import Sidebar from "../components/Sidebar";
-import { toggleStarRequest } from "../components/starReports";
+import { useNavigate }      from "react-router-dom";
+import NavBar               from "../components/NavBar";
+import Sidebar              from "../components/Sidebar";
+import { useReports }       from "../components/ReportsContext";
+import { FaTrashAlt }       from "react-icons/fa";
+import "../components/Profile.css";
 
-function History() {
-    const [reports, setReports] = useState([]);
-    const navigate = useNavigate();
-    const token = localStorage.getItem("token");
-    const API_BASE = import.meta.env.VITE_API_BASE_URL;
+function History () {
+  const navigate                      = useNavigate();
+  const { reports, toggleStar, deleteReport } = useReports();
 
-    useEffect(() => {
-        axios
-        .get(`${API_BASE}/api/reports/history`, {
-            headers: {Authorization: `Bearer: ${token}`},
-        })
-        .then((res) => setReports(res.data))
-        .catch(console.error);
-    }, []);
+  const monthOrder = {
+    January: 1, February: 2, March: 3,   April: 4,
+    May: 5,    June: 6,     July: 7,     August: 8,
+    September: 9, October: 10, November: 11, December: 12,
+  };
 
-    const toggleStar = (id, starred) => {
-        toggleStarRequest(id, !starred)
-        .then(() => {
-            setReports(prev =>
-              prev
-                .map(r =>                   
-                  r.id === id ? { ...r, starred: !r.starred } : r
-                )
-            );
-          })
-          .catch(console.error);
-    };
+  const fmtList = (v) =>
+    !v ? "" : Array.isArray(v) ? v.join(", ") : v.split(",").map(s => s.trim()).join(", ");
 
-    const renderRow = (r) => {
-        let filters = {};
-        try { filters = JSON.parse(r.filters); } catch {}
-        const muni   = filters.municipalities || "";
-        const months = filters.month || "";
-    
-
-        return (
-            <div key={r.id} className="report-row" onClick={() => nav(`/report/${r.id}`)}>
-            <div>
-            <strong>{r.title}</strong>
-            <div>{muni}</div>
-            <div>{months}</div>
-            </div>
-            <button onClick={(e) => { e.stopPropagation(); toggleStar(r.id, r.starred); }}>
-            {r.starred ? "★" : "☆"}
-            </button>
-        </div>
-        );
-    };
+  function formatMonthRange(input, year) {
+    if (!input) return "";
   
+    let arr = Array.isArray(input) ? input : [input];
+    if (arr.length === 1 && typeof arr[0] === "string" && arr[0].includes(",")) {
+      arr = arr[0].split(",").map(s => s.trim()).filter(Boolean);
+    }
+    if (!arr.length) return "";
+  
+    const sorted = [...new Set(arr)]
+      .sort((a, b) => monthOrder[a] - monthOrder[b]);
+  
+    const range =
+      sorted[0] === sorted.at(-1)
+        ? sorted[0]
+        : `${sorted[0]} – ${sorted.at(-1)}`;   
+  
+    return year ? `${range} ${year}` : range;
+  }
+
+
+  const Row = (report) => {
+    const filters        = JSON.parse(report.filters || "{}");
+    const municipalities = fmtList(filters.municipalities);
+    const monthList = formatMonthRange(filters.month, filters.year);
+
     return (
-        <div className="profile-container">
-            <NavBar />
-            <div className="main-layout">
-                <Sidebar />
-                <div className="profile-content">
-                    <h2 className="savedreports-header">All Reports</h2>
-                    {reports.length ? reports.map(renderRow) : <p>No reports</p>}
-                </div>
-            </div>
+      <div
+        key={report.id}
+        className="report-row"
+        onClick={() => navigate(`/report/${report.id}`)}
+        style={{
+          cursor:"pointer", border:"1px solid #ccc", padding:"10px",
+          marginBottom:"5px", borderRadius:"5px",
+          display:"flex", justifyContent:"space-between", alignItems:"center"
+        }}
+      >
+        <div>
+          <strong>{report.title}</strong>
+          <div>{municipalities}</div>
+          <div>{monthList}</div>
         </div>
+
+        <div style={{ display:"flex", gap:"0.75rem", alignItems:"center" }}>
+          <button
+            onClick={e => { e.stopPropagation(); toggleStar(report.id, !report.starred); }}
+            style={{
+              background:"none", border:"none", cursor:"pointer",
+              fontSize:"20px", color: report.starred ? "gold" : "#999"
+            }}
+          >
+            {report.starred ? "★" : "☆"}
+          </button>
+
+          <button
+            onClick={e => { e.stopPropagation(); deleteReport(report.id); }}
+            style={{ background:"none", border:"none", cursor:"pointer", color:"#c33" }}
+            title="Delete report"
+          >
+            <FaTrashAlt/>
+          </button>
+        </div>
+      </div>
     );
+  };
+
+  return (
+    <div className="profile-container">
+      <NavBar/>
+      <div className="main-layout">
+        <Sidebar/>
+        <div className="profile-content">
+          <h2 className="savedreports-header">All Reports</h2>
+          {reports === null
+            ? <p>Loading…</p>
+            : reports.length === 0
+            ? <p>No reports</p>
+            : reports.map(Row)}
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default History;

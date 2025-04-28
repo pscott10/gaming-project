@@ -44,6 +44,13 @@ function ReportTable(){
       //{ key: "Year", label: "Year" },
     ];
 
+    const monthOrder = {
+      January:  1, February: 2, March:      3,
+      April:    4, May:       5, June:      6,
+      July:     7, August:    8, September: 9,
+      October: 10, November: 11, December: 12,
+    };
+
     useEffect(() => {
       const token = localStorage.getItem("token");
       axios
@@ -71,8 +78,28 @@ function ReportTable(){
         .catch((e) => setError(e))
         .finally(() => setLoading(false));
     }, [id]);
-    
 
+    function formatMonthRange(input, year) {
+      if (!input) return "";
+    
+      let arr = Array.isArray(input) ? input : [input];
+      if (arr.length === 1 && typeof arr[0] === "string" && arr[0].includes(",")) {
+        arr = arr[0].split(",").map(s => s.trim()).filter(Boolean);
+      }
+      if (!arr.length) return "";
+    
+      const sorted = [...new Set(arr)]
+        .sort((a, b) => monthOrder[a] - monthOrder[b]);
+    
+      const range =
+        sorted[0] === sorted.at(-1)
+          ? sorted[0]
+          : `${sorted[0]} – ${sorted.at(-1)}`;   
+    
+      return year ? `${range} ${year}` : range;
+    }
+  
+    
     //sorting data
     const requestSort = (key) => {
       let dir = "asc";
@@ -239,15 +266,14 @@ function ReportTable(){
       <div className="rt-container">
         <button className="back-btn" onClick={() => navigate('/profile')}>← Back</button>
         <h1 className="rt-title">{reportInfo?.title}</h1>
-        {reportInfo?.filters && (() => {
-          const {month, year} = JSON.parse(reportInfo.filters);
-          return (
-            <div className="rt-subtitle">
-              <span className="rt-months">{month}</span>
-              <span className="rt-year">{year}</span>
-            </div>
-          );
-        })()}
+        {reportInfo?.filters && (
+          <h3 className="rt-subtitle">
+          {formatMonthRange(
+            JSON.parse(reportInfo.filters).month,
+            JSON.parse(reportInfo.filters).year
+          )}
+          </h3>
+        )}
 
         <div className="rt-controls"> 
           <button className="notes-btn" onClick={()=>setNotesModalOpen(true)}>

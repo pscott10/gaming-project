@@ -82,7 +82,7 @@ body.active-modal{
   display: flex;
   flex-direction: column;
   font-size: 0.9rem;
-  color: #333;
+  color: black;
 }
   
 .custom-col-form input {
@@ -96,7 +96,7 @@ body.active-modal{
   align-self: flex-end;
   padding: 0.5rem 1rem;
   background: #007bff;
-  color: #fff;
+  color: black;
   border: none;
   cursor: pointer;
 }

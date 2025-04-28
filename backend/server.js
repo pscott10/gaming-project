@@ -1,5 +1,4 @@
 //set up express server
-
 require('dotenv').config();
 const express = require('express');
 const passport = require('passport');
@@ -7,6 +6,10 @@ const cors = require('cors');
 const path = require('path');
 const reportRoutes = require('./routes/reports');
 const authRoutes = require('./routes/auth');
+
+process.on("uncaughtException", console.error);
+process.on("unhandledRejection", console.error);
+
 
 const app = express();
 const corsOptions = {
@@ -24,6 +27,7 @@ require('./config/passport');
 
 app.use('/api/reports', reportRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/user', require('./routes/users'));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
