@@ -433,5 +433,21 @@ router.patch(
   }
 );
 
+// DELETE /api/reports/:id
+router.delete('/:id', verifyToken, (req, res) => {
+  const sql = `
+    DELETE FROM comprehensive_reports
+    WHERE id = ? AND user_id = ?
+  `;
+  db.run(sql, [req.params.id, req.user.id], function (err) {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: 'DB error' });
+    }
+    if (!this.changes) return res.status(404).json({ error: 'Not found' });
+    res.json({ message: 'Deleted' });
+  });
+});
+
 
 module.exports = router;

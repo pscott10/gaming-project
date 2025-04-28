@@ -1,87 +1,58 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import NavBar from '../components/NavBar';
-import Sidebar from '../components/Sidebar';
-import CreateReportModal from '../components/CreateReportModal';
-import CreateReport from '../components/CreateReport';
-import '../components/Profile.css'; 
-import '../components/Sidebar.css';
-import { toggleStarRequest } from '../components/starReports';
+import { useState }          from "react";
+import { useNavigate }       from "react-router-dom";
+import NavBar                from "../components/NavBar";
+import Sidebar               from "../components/Sidebar";
+import CreateReportModal     from "../components/CreateReportModal";
+import CreateReport          from "../components/CreateReport";
+import { useReports }        from "../components/ReportsContext";
+import { FaTrashAlt }       from "react-icons/fa";
+import "../components/Profile.css";
+import "../components/Sidebar.css";
 
+function Profile () {
+  const navigate                 = useNavigate();
+  const { reports, toggleStar, deleteReport }  = useReports();       // <- from context
+  const starred                  = (reports ?? []).filter(r => r.starred);
 
-function Profile() {
-  const API_BASE = import.meta.env.VITE_API_BASE_URL;
-  const token    = localStorage.getItem('token');
-  const navigate = useNavigate();
+  const [open, setOpen]          = useState(false);
+  const openModal   = () => setOpen(true);
+  const closeModal  = () => setOpen(false);
 
-  // modal state
-  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+  const monthOrder = {
+    January: 1, February: 2, March: 3,   April: 4,
+    May: 5,    June: 6,     July: 7,     August: 8,
+    September: 9, October: 10, November: 11, December: 12,
+  };
+
+  function formatMonthRange(input, year) {
+    if (!input) return "";
   
-
-  // reports state
-  const [starredReports, setStarredReports] = useState([]);
-  const [recentReports, setRecentReports] = useState([]);
-
-  // open/close helpers
-  const openReportModal = () => setIsReportModalOpen(true);
-  const closeReportModal = () => setIsReportModalOpen(false);
+    let arr = Array.isArray(input) ? input : [input];
+    if (arr.length === 1 && typeof arr[0] === "string" && arr[0].includes(",")) {
+      arr = arr[0].split(",").map(s => s.trim()).filter(Boolean);
+    }
+    if (!arr.length) return "";
   
+    const sorted = [...new Set(arr)]
+      .sort((a, b) => monthOrder[a] - monthOrder[b]);
   
-  // Fetch starred comprehensive reports for the logged‑in user
-  useEffect(() => {
-    axios.get(
-      `${API_BASE}/api/reports/starred`,
-      { headers: { Authorization: `Bearer ${token}` },
-  })
-    .then((res) =>{
-      setStarredReports(Array.isArray(res.data) ? res.data : []);
-    })
-    .catch(console.error);
-  }, [API_BASE, token]);
+    const range =
+      sorted[0] === sorted.at(-1)
+        ? sorted[0]
+        : `${sorted[0]} – ${sorted.at(-1)}`;   
+  
+    return year ? `${range} ${year}` : range;
+  }
 
-  // toggle star
-  const handleToggleStar = (reportId, currentlyStarred) => {
-    toggleStarRequest(reportId, !currentlyStarred)
-      .then(() => {
-        setStarredReports((prev) =>
-          prev
-            .map((r) =>
-              r.id === reportId ? { ...r, starred: !r.starred } : r
-            )
-            .filter((r) => r.starred) // keep only starred for this page
-        );
-      })
-      .catch(console.error);
+  const fmtList = v =>
+    !v ? "" :
+    Array.isArray(v) ? v.join(", ") :
+    v.split(",").map(s => s.trim()).join(", ");
 
-
-    axios.patch(
-      `${API_BASE}/api/reports/${reportId}/star`,
-      { starred: !currentlyStarred },
-      { headers: { Authorization: `Bearer ${token}` } }
-    )
-    .then(() => {
-      setRecentReports(prev => {
-        const updated = prev.map(r =>
-          r.id === reportId ? { ...r, starred: !r.starred } : r
-        );
-        // starred first
-        updated.sort((a, b) => (b.starred === a.starred ? 0 : b.starred ? 1 : -1));
-        return updated;
-      });
-    })
-    .catch(console.error);
-  }; 
-
-  // render one row
-  const renderRow = (report) => {
-    let filters = {};
-    try {
-      filters = JSON.parse(report.filters);
-    } catch {}
-
-    const municipalities = filters.municipalities || '';
-    const monthList      = filters.month         || '';
+  const Row = (report) => {
+    const filters        = JSON.parse(report.filters || "{}");
+    const municipalities = fmtList(filters.municipalities);
+    const monthRange = formatMonthRange(filters.month, filters.year);
 
     return (
       <div
@@ -89,82 +60,72 @@ function Profile() {
         className="report-row"
         onClick={() => navigate(`/report/${report.id}`)}
         style={{
-          cursor: "pointer",
-          border: "1px solid #ccc",
-          padding: "10px",
-          marginBottom: "5px",
-          borderRadius: "5px",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center"
+          cursor:"pointer", border:"1px solid #ccc", padding:"10px",
+          marginBottom:"5px", borderRadius:"5px",
+          display:"flex", justifyContent:"space-between", alignItems:"center"
         }}
       >
         <div>
           <strong>{report.title}</strong>
           <div>{municipalities}</div>
-          <div>{monthList}</div>
+          <div>{monthRange}</div>
         </div>
 
-        <button
-          onClick={e => {
-            e.stopPropagation();
-            handleToggleStar(report.id, report.starred);
-          }}
-          style={{
-            background: "none",
-            border: "none",
-            cursor: "pointer",
-            fontSize: "20px"
-          }}
-        >
-          {report.starred ? "★" : "☆"}
-        </button>
+        <div style={{ display:"flex", gap:"0.75rem", alignItems:"center" }}>
+          <button
+            onClick={e => { e.stopPropagation(); toggleStar(report.id, !report.starred); }}
+            style={{
+              background:"none", border:"none", cursor:"pointer",
+              fontSize:"20px", color: report.starred ? "gold" : "#999"
+            }}
+          >
+            {report.starred ? "★" : "☆"}
+          </button>
+
+          <button
+            onClick={e => { e.stopPropagation(); deleteReport(report.id); }}
+            style={{ background:"none", border:"none", cursor:"pointer", color:"#c33" }}
+            title="Delete report"
+          >
+            <FaTrashAlt/>
+          </button>
+        </div>
       </div>
     );
   };
 
   return (
     <div className="profile-container">
-      <NavBar />
+      <NavBar/>
       <div className="main-layout">
-      <Sidebar />
+        <Sidebar/>
 
-      <div className="profile-content">
-        <div className="profile-header">
-          <div className="header-left">
-            <h2 className="savedreports-header">Starred Reports</h2>
-            <button className="create-report" onClick={openReportModal}>
-              Create Report
-            </button>
+        <div className="profile-content">
+          <div className="profile-header">
+            <div className="header-left">
+              <h2 className="savedreports-header">Starred Reports</h2>
+              <button className="create-report" onClick={openModal}>
+                Create Report
+              </button>
+            </div>
           </div>
 
-        
+          <div className="reports-list">
+            {reports === null
+              ? <p>Loading…</p>
+              : starred.length === 0
+              ? <p>No starred reports</p>
+              : starred.map(Row)}
+          </div>
         </div>
-
-        {/*List of starred reports*/}
-        <div className="reports-list">
-          {starredReports.length ? (
-            starredReports.map(renderRow)
-          ) : (
-            <p>No starred reports</p>
-          )}
-        </div>
-
-         <div className="reports-list">
-      {/*{recentReports.length > 0
-        ? recentReports.map(renderRow)
-        : <p>No recent reports</p>
-      }*/}
-    </div> 
       </div>
-      </div>
-      <CreateReportModal isOpen={isReportModalOpen} onClose={closeReportModal}>
-        <CreateReport />
+
+      {/* create-report modal */}
+      <CreateReportModal isOpen={open} onClose={closeModal}>
+        <CreateReport/>
       </CreateReportModal>
-  
-      
     </div>
   );
-};
+}
 
 export default Profile;

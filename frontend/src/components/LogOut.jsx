@@ -29,6 +29,7 @@ export default function LogOut({ onClose = () => {} }) {
 
     // remove client-side auth info
     localStorage.removeItem("token");
+    localStorage.removeItem("user");
     document.cookie.split(";").forEach(c => {
       document.cookie = c
         .replace(/^ +/, "")

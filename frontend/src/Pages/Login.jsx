@@ -13,16 +13,24 @@ export function Login(){
     const handleLogin = async (e) => {
         e.preventDefault();
         try{
-            const response = await axios.post(
+            const res = await axios.post(
                 `${import.meta.env.VITE_API_BASE_URL}/api/auth/login`,
                 {email, password}
             );
-            console.log("Login successful:", response.data);
-            localStorage.setItem('token', response.data.token);
-            //alert("Login successful");
+
+            console.log("Login successful:", res.data);
+            localStorage.setItem('token', res.data.token);
+
+            let user = res.data.user;
+            if (!user) {
+            const [, payload] = res.data.token.split(".");
+            user = JSON.parse(atob(payload));            // { id, name, email, … }
+            }
+            localStorage.setItem("user", JSON.stringify(user));
+        
             navigate('/profile');
-        } catch (error){
-            console.error("Login error:", error.response.data);
+        } catch (err){
+            console.error("Login error:", err.res?.data || err);
             alert("Login failed. Please check your credentials.");
         }
     };

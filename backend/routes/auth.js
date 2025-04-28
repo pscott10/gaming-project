@@ -39,11 +39,11 @@ router.post('/login', (req, res) => {
 
       if (isMatch) {
         const token = jwt.sign(
-          { id: user.id, email: user.email },
+          { id: user.id, name: user.name, email: user.email },
           process.env.JWT_SECRET || 'defaultSecret',
           { expiresIn: '1d' }
         );
-        return res.json({ message: 'Login successful', token });
+        return res.json({ message: 'Login successful', token, user});
       } else {
         return res.status(401).json({ error: 'Invalid credentials' });
       }

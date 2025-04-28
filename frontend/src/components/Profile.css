@@ -31,7 +31,7 @@
     flex: 1; 
     padding: 20px; 
     background-color: #fff;
-    background: lightgray; 
+    background: #d9e7f1; 
     color: black;
 }
 .profile-header{
@@ -50,14 +50,14 @@
     gap: 20px;
     flex-direction: column;
     font-family: sans-serif;
-    background-color: lightgray;
+    background-color: #d9e7f1;
     color: black;
 } 
 
 .header-left{
     display: flex;
     align-items: left;
-    background-color: lightgray;
+    background-color: #d9e7f1;
 }
 
 .savedreports-header{
@@ -65,7 +65,7 @@
     font-weight: bold;
     margin-right: 50px;
     padding-top: 10px;
-    background-color: lightgray;
+    background-color: #d9e7f1;
 }
 
 /* .saved-reports{
@@ -104,6 +104,7 @@
     border: 1px solid black;
     border-radius: 5px;
     cursor: pointer;
+    background: rgb(212, 199, 180);
 }
 
 .report-list:hover{
@@ -155,6 +156,7 @@
 
 .report-row {
     transition: background-color 0.3s;
+    background-color: #f9fcfc;
   }
   
   .report-row:hover {
@@ -163,6 +165,9 @@
   
   .report-row.starred {
     border-color: gold;
-    background-color: #fff8e1;
+    background-color: gold;
   }
+
+.trash-btn svg { color: black; }     
+.trash-btn:hover svg { color: #f33; }
   
