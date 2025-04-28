@@ -30,8 +30,8 @@
 .profile-content{
     flex: 1; 
     padding: 20px; 
-    background-color: #fff;
-    background: #d9e7f1; 
+
+    
     color: black;
 }
 .profile-header{
@@ -50,14 +50,14 @@
     gap: 20px;
     flex-direction: column;
     font-family: sans-serif;
-    background-color: #d9e7f1;
+   
     color: black;
 } 
 
 .header-left{
     display: flex;
     align-items: left;
-    background-color: #d9e7f1;
+   
 }
 
 .savedreports-header{
@@ -65,7 +65,7 @@
     font-weight: bold;
     margin-right: 50px;
     padding-top: 10px;
-    background-color: #d9e7f1;
+ 
 }
 
 /* .saved-reports{
@@ -82,7 +82,7 @@
     color: white;
     border: none;
     border-radius: 5px;
-    border: 1px solid blue; 
+   
     cursor: pointer;
 } 
 

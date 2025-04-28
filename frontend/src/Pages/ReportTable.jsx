@@ -5,7 +5,7 @@ import { evaluate } from 'mathjs';
 import CreateReportModal from '../components/CreateReportModal.jsx';
 import "../components/ReportTable.css";
 import NavBar from "../components/NavBar";
-import notebookIcon from '../assets/notebook.svg';
+import notebookIcon from '../assets/journal-text.svg';
 
 function ReportTable(){
     const token = localStorage.getItem('token');

@@ -62,13 +62,13 @@ const Settings = ({ close }) => {
   /* --- UI --- */
   return (
     <CreateReportModal isOpen onClose={close}>
-      <h2>Account Settings</h2>
+      <h2 className="account-settings">Account Settings</h2>
 
-      <DarkMode/>
+  
       <div className="set-tabs">
         <button onClick={()=>setTab("name")}   className={tab==="name"   ? "active":""}>Change&nbsp;Name</button>
         <button onClick={()=>setTab("pw")}     className={tab==="pw"     ? "active":""}>Change&nbsp;Password</button>
-        <button onClick={()=>setTab("delete")} className={tab==="delete" ? "active":""}>Delete&nbsp;Acct</button>
+        <button onClick={()=>setTab("delete")} className={tab==="delete" ? "active":""}>Delete&nbsp;Account</button>
       </div>
 
       {tab==="name" && (
@@ -76,7 +76,7 @@ const Settings = ({ close }) => {
           <label>New display name
             <input value={name} onChange={e=>setName(e.target.value)} required />
           </label>
-          <button disabled={busy}>Save</button>
+          <button className="save-settings" disabled={busy}>Save</button>
         </form>
       )}
 
@@ -88,7 +88,7 @@ const Settings = ({ close }) => {
           <label>New password
             <input type="password" value={newPass} onChange={e=>setNewPass(e.target.value)} required />
           </label>
-          <button disabled={busy}>Change Password</button>
+          <button className="save-settings" disabled={busy}>Change Password</button>
         </form>
       )}
 

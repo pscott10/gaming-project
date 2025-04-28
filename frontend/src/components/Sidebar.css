@@ -1,12 +1,12 @@
 .sidebar-background{
     width: fixed;
     height: 100vh;
-    background-color: lightblue;
+    background-color: cornflowerblue;
 }
 
 .sidebar{
     width: auto;
-    background-color: lightblue;
+    background-color: cornflowerblue;
     padding: 15px;
     flex-shrink: 0;
     position: flex ;
@@ -15,12 +15,12 @@
 }
 
 .sidebar-list{
-    background-color: lightblue;
+    background-color: cornflowerblue;
     margin-top: 15px;
 }
 
 .sidebar-button{
-    background-color: lightblue;
+    background-color: cornflowerblue;
     color: black;
     display: flex;
     flex-direction: row;
@@ -31,7 +31,7 @@
 
 .profile{
     font-family: sans-serif;
-    background-color: lightblue;
+    background-color: cornflowerblue;
     color: black;
     margin-top: 13px;
     font-size: 36px;
@@ -58,7 +58,7 @@
 }
 
 li{
-    background-color: lightblue;
+    background-color: cornflowerblue;
     color: black;
     display: flex;
     flex-direction: row;
