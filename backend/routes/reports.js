@@ -45,7 +45,7 @@ router.post('/upload', upload.single('file'), (req, res) => {
         return res.status(400).json({ error: `Report for ${month} ${year} already exists` });
       }
   
-      // If no duplicates, proceed with processing the CSV
+      // If no duplicates, process the CSV
       const results = [];
       fs.createReadStream(req.file.path)
         .pipe(csv({ skipLines: 3 }))
@@ -183,7 +183,6 @@ router.post('/upload', upload.single('file'), (req, res) => {
             return res.status(500).json({error: 'Database error while fetching data'});
         }
 
-        // Define a month order mapping so we can compare months numerically.
         const monthOrder = {
           January: 1,
           February: 2,
@@ -199,7 +198,6 @@ router.post('/upload', upload.single('file'), (req, res) => {
           December: 12
         };
 
-        //console.log("Raw rows:", rows);
         //group by license number to sum
         const grouped = {};
         rows.forEach(row => {

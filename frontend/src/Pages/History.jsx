@@ -1,12 +1,12 @@
-import { useNavigate }      from "react-router-dom";
-import NavBar               from "../components/NavBar";
-import Sidebar              from "../components/Sidebar";
-import { useReports }       from "../components/ReportsContext";
-import { FaTrashAlt }       from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import NavBar from "../components/NavBar";
+import Sidebar from "../components/Sidebar";
+import { useReports } from "../components/ReportsContext";
+import { FaTrashAlt } from "react-icons/fa";
 import "../components/Profile.css";
 
 function History () {
-  const navigate                      = useNavigate();
+  const navigate = useNavigate();
   const { reports, toggleStar, deleteReport } = useReports();
 
   const monthOrder = {
@@ -40,7 +40,7 @@ function History () {
 
 
   const Row = (report) => {
-    const filters        = JSON.parse(report.filters || "{}");
+    const filters = JSON.parse(report.filters || "{}");
     const municipalities = fmtList(filters.municipalities);
     const monthList = formatMonthRange(filters.month, filters.year);
 

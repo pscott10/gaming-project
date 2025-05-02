@@ -4,7 +4,6 @@ const path = require('path');
 //path to SQL db file
 const dbPath = path.join(__dirname, 'gaming-edge.db');
 
-//open/create db
 const db = new sqlite3.Database(dbPath, (err) => {
     if(err){
         console.error('Error opening SQLite database:', err.message);
@@ -13,7 +12,6 @@ const db = new sqlite3.Database(dbPath, (err) => {
     }
 });
 
-//create main table
 db.run(`
     CREATE TABLE IF NOT EXISTS gaming_data (
       id INTEGER PRIMARY KEY AUTOINCREMENT,

@@ -16,18 +16,15 @@ export default function LogOut({ onClose = () => {} }) {
     const token = localStorage.getItem("token");
 
     try {
-      // optional – tell the server to invalidate the token
       await axios.post(
         `${import.meta.env.VITE_API_BASE_URL}/api/auth/logout`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
     } catch (e) {
-      // network error or server didn’t implement /logout – ignore
       console.warn("Server logout failed (continuing locally)", e);
     }
 
-    // remove client-side auth info
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     document.cookie.split(";").forEach(c => {
@@ -36,7 +33,7 @@ export default function LogOut({ onClose = () => {} }) {
         .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
     });
 
-    // close modal & go to home screen
+    // close modal, go to home page
     onClose();
     navigate("/", { replace: true });
   };

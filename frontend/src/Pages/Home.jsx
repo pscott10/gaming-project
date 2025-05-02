@@ -1,7 +1,6 @@
 import React from 'react'
 import '../components/Home.css'
-import {Link, useNavigate} from 'react-router-dom'
-import SlotMachine from '../assets/slot-machine-svgrepo-com.svg'
+import {useNavigate} from 'react-router-dom'
 import DarkMode from '../components/DarkMode'
 import NavBar from '../components/NavBar'
 
@@ -21,20 +20,15 @@ export function Home() {
             navigate('/createAccount');
         }
 
-      
-
     return (
         <>
-        
         <div className= "home-container">
             <NavBar />
-            {/* <div className ='background-icon'> */}
             <div className="header2">
-                <div className="logo2" > {/*<img src={SlotMachine} alt="" className='machine-icon-home'/>*/}
+                <div className="logo2" > 
                      Gaming Edge</div>
                 <DarkMode />
             </div>
-            {/* </div> */}
             <div className="buttons">
                 <ul className='home-list'>
                     <button className="active" onClick={logIn}>Sign In</button>

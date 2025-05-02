@@ -12,7 +12,7 @@ const Settings = ({ close }) => {
   const [curPass, setCurPass] = useState("");
   const [newPass, setNewPass] = useState("");
   const [busy, setBusy] = useState(false);
-  const [tab, setTab] = useState("name"); // name | pass | delete
+  const [tab, setTab] = useState("name"); 
   const headers = { Authorization: `Bearer ${token}` };
 
   const toast = (msg)=>alert(msg);               
@@ -55,11 +55,10 @@ const Settings = ({ close }) => {
       setBusy(true);
       await axios.delete(`${API}/api/user`, {headers});
       localStorage.clear();
-      window.location.href = "/"; // boot to landing
+      window.location.href = "/"; 
     }catch(e){ toast(e.response?.data?.error || "Error"); } finally{ setBusy(false); }
   };
 
-  /* --- UI --- */
   return (
     <CreateReportModal isOpen onClose={close}>
       <h2 className="account-settings">Account Settings</h2>

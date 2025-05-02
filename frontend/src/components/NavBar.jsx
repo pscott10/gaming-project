@@ -39,21 +39,21 @@ const NavBar = () => {
 
     return(
         <div className="nav-container">
-            <h1 className="logo" onClick={goHome} style={{ cursor: "pointer" }}>
+            <h1 className="logo">
                 <img src={SlotMachine} alt="" className='machine-icon'/>
                 Gaming Edge
             </h1>
 
              <ul className='nav-list'>
-                 <button className="home-button" onClick={goHome}>Home</button>
-                 <button className="about-button" onClick={about}>About</button>
-
+                {/*If logged in, only show welcome user, else show nav bar buttons*/}
                  {username ? (
                     <>
                     <li className="welcome-msg">Welcome,&nbsp;{username}</li>
                     </>
                 ) : (
                     <>
+                    <button className="home-button" onClick={goHome}>Home</button>
+                    <button className="about-button" onClick={about}>About</button>
                     <button onClick={logIn}>Sign In</button>
                     <button onClick={createAccount}>Register</button>
                     </>

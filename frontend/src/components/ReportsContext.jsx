@@ -10,9 +10,9 @@ export function ReportsProvider({ children }) {
   const token   = localStorage.getItem("token");
   const headers = { Authorization: `Bearer ${token}` };
 
-  const [reports, setReports] = useState(null);          // null = loading
+  const [reports, setReports] = useState(null);        
 
-  /* one initial fetch                                         */
+  /* initial fetch */
   useEffect(() => {
     axios
       .get(`${API}/api/reports/history`, { headers })
@@ -20,7 +20,7 @@ export function ReportsProvider({ children }) {
       .catch(err => { console.error(err); setReports([]); });
   }, []);
 
-  /* toggle star helper                                        */
+  /* toggle star */
   const toggleStar = async (id, starred) => {
     await axios.patch(`${API}/api/reports/${id}/star`, { starred }, { headers });
     setReports(r =>
@@ -28,7 +28,7 @@ export function ReportsProvider({ children }) {
     );
   };
 
-  /* delete helper                                             */
+  /* delete report */
   const deleteReport = async (id) => {
     await axios.delete(`${API}/api/reports/${id}`, { headers });
     setReports(r => r.filter(rep => rep.id !== id));
