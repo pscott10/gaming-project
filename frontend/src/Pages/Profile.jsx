@@ -11,7 +11,7 @@ import "../components/Sidebar.css";
 
 function Profile () {
   const navigate                 = useNavigate();
-  const { reports, toggleStar, deleteReport }  = useReports();       // <- from context
+  const { reports, toggleStar, deleteReport }  = useReports();      
   const starred                  = (reports ?? []).filter(r => r.starred);
 
   const [open, setOpen]          = useState(false);

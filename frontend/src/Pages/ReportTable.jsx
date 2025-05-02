@@ -21,7 +21,7 @@ function ReportTable(){
     const [modalOpen, setModalOpen] = useState(false);
     const [newColumnName, setNewColumnName] = useState("");
     const [newFormula, setNewFormula] = useState("");
-    const [modalTab, setModalTab] = useState("add"); //can be add or hidden
+    const [modalTab, setModalTab] = useState("add"); 
     const [notesModalOpen, setNotesModalOpen] = useState(false);
     const [notes, setNotes] = useState('');
     const [editingNotes, setEditingNotes] = useState(false);
@@ -40,8 +40,6 @@ function ReportTable(){
       { key: "NTITax", label: "NTI Tax" },
       { key: "StateShare", label: "State Share" },
       { key: "MunicipalityShare", label: "Municipality Share" },
-      //{ key: "Month", label: "Month" },
-      //{ key: "Year", label: "Year" },
     ];
 
     const monthOrder = {

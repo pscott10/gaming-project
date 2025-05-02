@@ -1,7 +1,7 @@
 import './App.css'
 import React, { useState } from 'react'
 import {Routes, Route} from 'react-router-dom'
-import {Home} from './Pages/Home'
+import {Home} from './pages/Home'
 import {CreateAccount} from './pages/CreateAccount'
 import {Login} from './pages/Login'
 import Profile from './pages/Profile'
@@ -9,7 +9,7 @@ import Charts from './pages/Charts'
 import CreateReport from './components/CreateReport';
 import ReportTable from './pages/ReportTable';
 import CreateReportModal from './components/CreateReportModal';
-import About from './Pages/About'; 
+import About from './pages/About'; 
 import History from './pages/History';
 import Tools from './pages/Tools';
 

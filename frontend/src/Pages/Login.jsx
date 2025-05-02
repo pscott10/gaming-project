@@ -3,7 +3,6 @@ import '../components/Login.css';
 import { useNavigate, Link} from 'react-router-dom';
 import axios from 'axios';
 import NavBar from '../components/NavBar';
-import CreateAccount from './CreateAccount';
 
 export function Login(){
     const [email, setEmail] = useState('');
@@ -24,7 +23,7 @@ export function Login(){
             let user = res.data.user;
             if (!user) {
             const [, payload] = res.data.token.split(".");
-            user = JSON.parse(atob(payload));            // { id, name, email, … }
+            user = JSON.parse(atob(payload));            
             }
             localStorage.setItem("user", JSON.stringify(user));
         
@@ -69,8 +68,6 @@ export function Login(){
                     </a>
             </div>
             </form>
-            
-            {/* <div className="forgot-password">Forgot Password?<span>Click Here!</span> </div> */}
             <div className="forgot-password"><Link to="/createAccount" className='spanCreateAccount'>Don't have an account?</Link> </div>
         </div>
         </div>
